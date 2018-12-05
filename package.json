@@ -1,0 +1,25 @@
+{
+  "name": "tomato",
+  "version": "1.0.0",
+  "description": "A synth.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [
+    "synth",
+    "music",
+    "web-audio",
+    "audio"
+  ],
+  "author": "Zach Green",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^7.0.2",
+    "react": "^16.7.0-alpha.2",
+    "react-dom": "^16.7.0-alpha.2",
+    "tone": "^0.12.80"
+  }
+}
