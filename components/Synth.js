@@ -2,9 +2,16 @@ import { memo, Fragment, useEffect, useState, useReducer } from "react";
 import Tone from "tone";
 import { chromaticKeyMap } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+// @TODO breaks FF
+const effects = {
+  chorus: new Tone.Chorus().toMaster(),
+  reverb: new Tone.Reverb().toMaster()
+};
 
 const initialState = {
   activeNotes: [],
+  addEffect: null,
+  removeEffect: null,
   attack: null,
   release: null,
   octave: 2,
@@ -18,6 +25,21 @@ const reducer = (state, action) => {
         activeNotes: state.activeNotes.concat(action.payload),
         attack: action.payload,
         release: null
+      };
+    case "addEffect":
+      return {
+        ...state,
+        attack: null,
+        release: null,
+        addEffect: action.payload
+      };
+    case "removeEffect":
+      return {
+        ...state,
+        attack: null,
+        release: null,
+        addEffect: null,
+        removeEffect: action.payload
       };
     case "octave":
       return {
@@ -46,7 +68,15 @@ const reducer = (state, action) => {
 };
 export default memo(() => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { activeNotes, attack, octave, oscillator, release } = state;
+  const {
+    addEffect,
+    activeNotes,
+    attack,
+    octave,
+    oscillator,
+    release,
+    removeEffect
+  } = state;
   const notes = chromaticKeyMap(octave);
   useEffect(
     () => {
@@ -58,6 +88,12 @@ export default memo(() => {
       }
       if (oscillator) {
         synth.set({ oscillator: { type: oscillator } });
+      }
+      if (addEffect) {
+        synth.connect(effects[addEffect]);
+      }
+      if (removeEffect) {
+        synth.disconnect(effects[removeEffect]);
       }
     },
     [state]
@@ -73,7 +109,9 @@ export default memo(() => {
     const targetKey = key || target.value;
     dispatch({ type: "release", payload: notes[targetKey] });
   };
-
+  const handleEffectChange = e => {
+    dispatch({ type: "addEffect", payload: e.target.value });
+  };
   const handleOctaveChange = e => {
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
   };
@@ -128,7 +166,12 @@ export default memo(() => {
           step="1"
         />
       </label>
-
+      {Object.keys(effects).map(key => (
+        <label key={key}>
+          {key}
+          <input onChange={handleEffectChange} value={key} type="checkbox" />
+        </label>
+      ))}
       <div>
         {Object.entries(notes).map(([key, val]) => (
           <button
