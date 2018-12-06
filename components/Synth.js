@@ -51,15 +51,18 @@ export default memo(() => {
     },
     [state]
   );
-  const onKeyDown = ({ key }) => {
-    if (notes[key] === attack) {
+  const onKeyDown = ({ key, target }) => {
+    const targetKey = key || target.value;
+    if (notes[targetKey] === attack) {
       return;
     }
-    dispatch({ type: "attack", payload: notes[key] });
+    dispatch({ type: "attack", payload: notes[targetKey] });
   };
-  const onKeyUp = ({ key }) => {
-    dispatch({ type: "release", payload: notes[key] });
+  const onKeyUp = ({ key, target }) => {
+    const targetKey = key || target.value;
+    dispatch({ type: "release", payload: notes[targetKey] });
   };
+
   const handleOctaveChange = e => {
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
   };
@@ -75,7 +78,8 @@ export default memo(() => {
         button {
           appearance: none;
           background-color: transparent;
-          border: 0;
+          border: 1px solid tomato;
+          padding: 0;
         }
         span {
           display: flex;
@@ -89,17 +93,28 @@ export default memo(() => {
           width: 100vw;
         }
       `}</style>
-      <input
-        onChange={handleOctaveChange}
-        type="range"
-        min="0"
-        max="4"
-        value={octave}
-        step="1"
-      />
+      <label>
+        Octave
+        <input
+          onChange={handleOctaveChange}
+          type="range"
+          min="0"
+          max="4"
+          value={octave}
+          step="1"
+        />
+      </label>
+
       <div>
         {Object.entries(notes).map(([key, val]) => (
-          <button key={key}>
+          <button
+            onTouchStart={onKeyDown}
+            onTouchEnd={onKeyDown}
+            onMouseDown={onKeyDown}
+            onMouseUp={onKeyUp}
+            key={key}
+            value={key}
+          >
             <span
               style={{
                 backgroundColor: activeNotes.includes(val)
