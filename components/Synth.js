@@ -7,7 +7,8 @@ const initialState = {
   activeNotes: [],
   attack: null,
   release: null,
-  octave: 2
+  octave: 2,
+  oscillator: "triangle"
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -25,6 +26,13 @@ const reducer = (state, action) => {
         release: null,
         octave: action.payload
       };
+    case "oscillator":
+      return {
+        ...state,
+        attack: null,
+        release: null,
+        oscillator: action.payload
+      };
     case "release":
       return {
         ...state,
@@ -38,7 +46,7 @@ const reducer = (state, action) => {
 };
 export default memo(() => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { activeNotes, attack, octave, release } = state;
+  const { activeNotes, attack, octave, oscillator, release } = state;
   const notes = chromaticKeyMap(octave);
   useEffect(
     () => {
@@ -47,6 +55,9 @@ export default memo(() => {
       }
       if (release) {
         synth.triggerRelease(release);
+      }
+      if (oscillator) {
+        synth.set({ oscillator: { type: oscillator } });
       }
     },
     [state]
@@ -65,6 +76,9 @@ export default memo(() => {
 
   const handleOctaveChange = e => {
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
+  };
+  const handleOscillatorChange = ({ target: { value: payload } }) => {
+    dispatch({ type: "oscillator", payload });
   };
   console.log("state", state);
   return (
@@ -93,6 +107,16 @@ export default memo(() => {
           width: 100vw;
         }
       `}</style>
+      <label>
+        Oscillator
+        <select onChange={handleOscillatorChange} value={oscillator}>
+          {["sine", "square", "triangle", "sawtooth"].map(wave => (
+            <option key={wave} value={wave}>
+              {wave}
+            </option>
+          ))}
+        </select>
+      </label>
       <label>
         Octave
         <input
