@@ -1,35 +1,41 @@
-import { memo, Fragment, useEffect, useState } from "react";
+import { memo, Fragment, useEffect, useState, useReducer } from "react";
 import Tone from "tone";
 import { chromaticKeyMap } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 
+const reducer = ({ attack, release }, action) => {
+  switch (action.type) {
+    case "attack":
+      return {
+        attack: action.payload
+      };
+    case "release":
+      return { release: action.payload };
+    default:
+      return state;
+  }
+};
 export default memo(() => {
-  const [attackNote, setAttackNote] = useState();
-  const [releaseNote, setReleaseNote] = useState();
+  const [state, dispatch] = useReducer(reducer, {});
   const [activeNotes, setActiveNotes] = useState([]);
   useEffect(
     () => {
-      synth.triggerAttack(attackNote);
+      synth.triggerAttack(state.attack);
+      synth.triggerRelease(state.release);
     },
-    [attackNote]
-  );
-  useEffect(
-    () => {
-      synth.triggerRelease(releaseNote);
-    },
-    [releaseNote]
+    [state]
   );
   const onKeyDown = ({ key }) => {
-    if (chromaticKeyMap(2)[key] === attackNote) {
+    if (chromaticKeyMap(2)[key] === state.attack) {
       return;
     }
-    setAttackNote(chromaticKeyMap(2)[key]);
+    dispatch({ type: "attack", payload: chromaticKeyMap(2)[key] });
     setActiveNotes(notes => {
       return notes.concat(chromaticKeyMap(2)[key]);
     });
   };
   const onKeyUp = ({ key }) => {
-    setReleaseNote(chromaticKeyMap(2)[key]);
+    dispatch({ type: "release", payload: chromaticKeyMap(2)[key] });
     setActiveNotes(notes => {
       return notes.filter(note => note !== chromaticKeyMap(2)[key]);
     });
