@@ -4,8 +4,8 @@ import { chromaticKeyMap } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 // @TODO breaks FF
 const effects = {
-  chorus: new Tone.Chorus().toMaster(),
-  reverb: new Tone.Reverb().toMaster()
+  chorus: new Tone.Chorus(),
+  reverb: new Tone.Reverb()
 };
 
 const initialState = {
@@ -31,7 +31,8 @@ const reducer = (state, action) => {
         ...state,
         attack: null,
         release: null,
-        addEffect: action.payload
+        addEffect: action.payload,
+        removeEffect: null
       };
     case "removeEffect":
       return {
@@ -66,7 +67,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
-export default memo(() => {
+export default () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     addEffect,
@@ -90,10 +91,11 @@ export default memo(() => {
         synth.set({ oscillator: { type: oscillator } });
       }
       if (addEffect) {
+        effects[addEffect].toMaster();
         synth.connect(effects[addEffect]);
       }
       if (removeEffect) {
-        synth.disconnect(effects[removeEffect]);
+        effects[removeEffect].disconnect();
       }
     },
     [state]
@@ -109,8 +111,9 @@ export default memo(() => {
     const targetKey = key || target.value;
     dispatch({ type: "release", payload: notes[targetKey] });
   };
-  const handleEffectChange = e => {
-    dispatch({ type: "addEffect", payload: e.target.value });
+  const handleEffectChange = ({ target: { value: payload } }) => {
+    const type = addEffect === payload ? "removeEffect" : "addEffect";
+    dispatch({ type, payload });
   };
   const handleOctaveChange = e => {
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
@@ -196,4 +199,4 @@ export default memo(() => {
       </div>
     </div>
   );
-});
+};
