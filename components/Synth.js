@@ -4,6 +4,7 @@ import { chromaticKeyMap } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 // @TODO breaks FF
 const effects = {
+  "Bit Crusher": new Tone.BitCrusher(),
   chorus: new Tone.Chorus(),
   reverb: new Tone.Reverb()
 };
