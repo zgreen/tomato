@@ -1,5 +1,9 @@
 import { memo, Fragment, useEffect, useRef, useReducer } from "react";
 import Tone from "tone";
+import Button, { InnerButton } from "./presentational/SynthButton";
+import Controls from "./presentational/Controls";
+import Keyboard from "./presentational/Keyboard";
+import Synth from "./presentational/Synth";
 import { chromaticKeyMap, keyboardKeys } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 
@@ -128,48 +132,12 @@ export default () => {
     dispatch({ type: "oscillator", payload });
   };
   const onButtonClick = () => {
-    // `current` points to the mounted text input element
     inputEl.current.focus();
   };
   console.log("state", state);
   return (
-    <div className="container" onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
-      <style jsx>{`
-        button {
-          appearance: none;
-          background-color: transparent;
-          border: 1px solid tomato;
-          flex: 1 1 10%;
-          padding: 0;
-        }
-        h2 {
-          text-align: center;
-        }
-        span {
-          align-items: center;
-          display: flex;
-          height: 100px;
-          flex-direction: column;
-          justify-content: center;
-          pointer-events: none;
-        }
-        .container {
-          flex-direction: column;
-          display: flex;
-          flex: 1 1 100%;
-          width: 100%;
-        }
-        .controls {
-          color: tomato;
-        }
-        .keyboard {
-          border: 1px solid tomato;
-          display: flex;
-          flex: 1 1 100%;
-          flex-wrap: wrap;
-        }
-      `}</style>
-      <div className="controls">
+    <Synth onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
+      <Controls>
         <label>
           Octave
           <input
@@ -199,10 +167,10 @@ export default () => {
             <input onChange={handleEffectChange} value={key} type="checkbox" />
           </label>
         ))}
-      </div>
-      <div className="keyboard">
+      </Controls>
+      <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (
-          <button
+          <Button
             onTouchStart={onKeyDown}
             onTouchEnd={onKeyDown}
             onMouseDown={onKeyDown}
@@ -219,13 +187,13 @@ export default () => {
               order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
             }}
           >
-            <span>
+            <InnerButton>
               {key}
               <h2>{notes[key]}</h2>
-            </span>
-          </button>
+            </InnerButton>
+          </Button>
         ))}
-      </div>
-    </div>
+      </Keyboard>
+    </Synth>
   );
 };
