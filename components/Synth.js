@@ -120,7 +120,9 @@ export default () => {
     },
     [state]
   );
-  const onKeyDown = ({ key, target }) => {
+  const onKeyDown = e => {
+    e.preventDefault();
+    const { key, target } = e;
     if (!keyboardKeys.includes(key)) {
       return;
     }
@@ -130,7 +132,10 @@ export default () => {
     }
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
-  const onKeyUp = ({ key, target }) => {
+  const onKeyUp = e => {
+    synth.triggerAttackRelease("C4", "8n");
+    e.preventDefault();
+    const { key, target } = e;
     if (!keyboardKeys.includes(key)) {
       return;
     }

@@ -1,5 +1,6 @@
 import { createContext, memo, useContext, useState } from "react";
 import Tone from "tone";
+import startAudioContext from "startaudiocontext";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 
 const effects = {
@@ -14,8 +15,10 @@ export default ({ children }) => {
   const [didStart, setDidStart] = useState(false);
   const handleKeyUp = e => {
     e.preventDefault();
-    synth.triggerAttackRelease("C4", "8n");
-    setDidStart(true);
+    startAudioContext(Tone.context, "button").then(function() {
+      synth.triggerAttackRelease("C4", "8n");
+      setDidStart(true);
+    });
   };
   console.log("didStart", didStart);
   return didStart ? (
