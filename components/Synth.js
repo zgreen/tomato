@@ -1,4 +1,4 @@
-import { memo, Fragment, useEffect, useState, useReducer } from "react";
+import { memo, Fragment, useEffect, useRef, useReducer } from "react";
 import Tone from "tone";
 import { chromaticKeyMap, keyboardKeys } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
@@ -80,6 +80,10 @@ export default () => {
     release,
     removeEffect
   } = state;
+  const rangeEl = useRef(null);
+  useEffect(() => {
+    rangeEl.current.focus();
+  }, []);
   const notes = chromaticKeyMap(octave);
   useEffect(
     () => {
@@ -123,65 +127,79 @@ export default () => {
   const handleOscillatorChange = ({ target: { value: payload } }) => {
     dispatch({ type: "oscillator", payload });
   };
+  const onButtonClick = () => {
+    // `current` points to the mounted text input element
+    inputEl.current.focus();
+  };
   console.log("state", state);
   return (
     <div className="container" onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
-      <style jsx global>{`
-        body {
-          margin: 0;
-        }
-      `}</style>
       <style jsx>{`
         button {
           appearance: none;
           background-color: transparent;
           border: 1px solid tomato;
-          flex: 0 0 10%;
+          flex: 1 1 10%;
           padding: 0;
         }
+        h2 {
+          text-align: center;
+        }
         span {
+          align-items: center;
           display: flex;
           height: 100px;
+          flex-direction: column;
+          justify-content: center;
           pointer-events: none;
         }
         .container {
-          height: 100vh;
-          top: 0;
-          position: absolute;
-          width: 100vw;
+          flex-direction: column;
+          display: flex;
+          flex: 1 1 100%;
+          width: 100%;
+        }
+        .controls {
+          color: tomato;
         }
         .keyboard {
+          border: 1px solid tomato;
           display: flex;
+          flex: 1 1 100%;
           flex-wrap: wrap;
         }
       `}</style>
-      <label>
-        Oscillator
-        <select onChange={handleOscillatorChange} value={oscillator}>
-          {["sine", "square", "triangle", "sawtooth"].map(wave => (
-            <option key={wave} value={wave}>
-              {wave}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Octave
-        <input
-          onChange={handleOctaveChange}
-          type="range"
-          min="0"
-          max="4"
-          value={octave}
-          step="1"
-        />
-      </label>
-      {Object.keys(effects).map(key => (
-        <label key={key}>
-          {key}
-          <input onChange={handleEffectChange} value={key} type="checkbox" />
+      <div className="controls">
+        <label>
+          Octave
+          <input
+            ref={rangeEl}
+            onChange={handleOctaveChange}
+            type="range"
+            min="0"
+            max="4"
+            value={octave}
+            step="1"
+          />
         </label>
-      ))}
+        <label>
+          Oscillator
+          <select onChange={handleOscillatorChange} value={oscillator}>
+            {["sine", "square", "triangle", "sawtooth"].map(wave => (
+              <option key={wave} value={wave}>
+                {wave}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        {Object.keys(effects).map(key => (
+          <label key={key}>
+            {key}
+            <input onChange={handleEffectChange} value={key} type="checkbox" />
+          </label>
+        ))}
+      </div>
       <div className="keyboard">
         {keyboardKeys.map((key, idx, arr) => (
           <button
@@ -192,17 +210,18 @@ export default () => {
             key={key}
             value={key}
             style={{
+              backgroundColor: activeNotes.includes(notes[key])
+                ? "tomato"
+                : "transparent",
+              color: activeNotes.includes(notes[key])
+                ? "var(--black)"
+                : "tomato",
               order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
             }}
           >
-            <span
-              style={{
-                backgroundColor: activeNotes.includes(notes[key])
-                  ? "tomato"
-                  : "transparent"
-              }}
-            >
+            <span>
               {key}
+              <h2>{notes[key]}</h2>
             </span>
           </button>
         ))}
