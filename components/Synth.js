@@ -141,6 +141,7 @@ export default () => {
         span {
           display: flex;
           height: 100px;
+          pointer-events: none;
         }
         .container {
           height: 100vh;
