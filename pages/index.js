@@ -1,6 +1,9 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 
+const Start = dynamic(() => import("../components/Start"), {
+  ssr: false
+});
 const Synth = dynamic(() => import("../components/Synth"), {
   ssr: false
 });
@@ -43,6 +46,8 @@ export default () => (
       }
     `}</style>
     <h1>🍅</h1>
-    <Synth />
+    <Start>
+      <Synth />
+    </Start>
   </main>
 );

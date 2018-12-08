@@ -1,18 +1,27 @@
-import { memo, Fragment, useEffect, useRef, useReducer } from "react";
-import Tone from "tone";
+import {
+  memo,
+  Fragment,
+  useEffect,
+  useRef,
+  useReducer,
+  useState,
+  useContext
+} from "react";
+// import Tone from "tone";
 import Button, { InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
 import Keyboard from "./presentational/Keyboard";
 import Synth from "./presentational/Synth";
+import { ToneContext } from "./Start";
 import { chromaticKeyMap, keyboardKeys } from "../config";
-const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+// const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 
-const effects = {
-  "Bit Crusher": new Tone.BitCrusher(),
-  // @TODO breaks FF
-  // chorus: new Tone.Chorus(),
-  reverb: new Tone.Reverb()
-};
+// const effects = {
+//   "Bit Crusher": new Tone.BitCrusher(),
+//   // @TODO breaks FF
+//   // chorus: new Tone.Chorus(),
+//   reverb: new Tone.Reverb()
+// };
 
 const initialState = {
   activeNotes: [],
@@ -74,6 +83,7 @@ const reducer = (state, action) => {
   }
 };
 export default () => {
+  const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     addEffect,
@@ -84,7 +94,7 @@ export default () => {
     release,
     removeEffect
   } = state;
-  const rangeEl = useRef(null);
+  const rangeEl = useRef({ current: { focus: () => {} } });
   useEffect(() => {
     rangeEl.current.focus();
   }, []);
