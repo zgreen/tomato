@@ -27,6 +27,9 @@ button {
   flex: 1 1 10%;
   padding: 0;
 }
+button * {
+  pointer-events: none;
+}
 `;
 export default props => (
   <>

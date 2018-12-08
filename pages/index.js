@@ -8,6 +8,7 @@ const Synth = dynamic(() => import("../components/Synth"), {
 export default () => (
   <main>
     <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>🍅</title>
     </Head>
     <style jsx global>{`
