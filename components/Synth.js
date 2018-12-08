@@ -111,6 +111,9 @@ export default () => {
     [state]
   );
   const onKeyDown = ({ key, target }) => {
+    if (!keyboardKeys.includes(key)) {
+      return;
+    }
     const targetKey = key || target.value;
     if (notes[targetKey] === attack) {
       return;
@@ -118,6 +121,9 @@ export default () => {
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
   const onKeyUp = ({ key, target }) => {
+    if (!keyboardKeys.includes(key)) {
+      return;
+    }
     const targetKey = key || target.value;
     dispatch({ type: "release", payload: notes[targetKey] });
   };
