@@ -1,6 +1,6 @@
 import { memo, Fragment, useEffect, useState, useReducer } from "react";
 import Tone from "tone";
-import { chromaticKeyMap } from "../config";
+import { chromaticKeyMap, keyboardKeys } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
 // @TODO breaks FF
 const effects = {
@@ -135,18 +135,22 @@ export default () => {
           appearance: none;
           background-color: transparent;
           border: 1px solid tomato;
+          flex: 0 0 10%;
           padding: 0;
         }
         span {
           display: flex;
           height: 100px;
-          width: 100px;
         }
         .container {
           height: 100vh;
           top: 0;
           position: absolute;
           width: 100vw;
+        }
+        .keyboard {
+          display: flex;
+          flex-wrap: wrap;
         }
       `}</style>
       <label>
@@ -176,8 +180,8 @@ export default () => {
           <input onChange={handleEffectChange} value={key} type="checkbox" />
         </label>
       ))}
-      <div>
-        {Object.entries(notes).map(([key, val]) => (
+      <div className="keyboard">
+        {keyboardKeys.map((key, idx, arr) => (
           <button
             onTouchStart={onKeyDown}
             onTouchEnd={onKeyDown}
@@ -185,10 +189,13 @@ export default () => {
             onMouseUp={onKeyUp}
             key={key}
             value={key}
+            style={{
+              order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
+            }}
           >
             <span
               style={{
-                backgroundColor: activeNotes.includes(val)
+                backgroundColor: activeNotes.includes(notes[key])
                   ? "tomato"
                   : "transparent"
               }}
