@@ -2,10 +2,11 @@ import { memo, Fragment, useEffect, useState, useReducer } from "react";
 import Tone from "tone";
 import { chromaticKeyMap, keyboardKeys } from "../config";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-// @TODO breaks FF
+
 const effects = {
   "Bit Crusher": new Tone.BitCrusher(),
-  chorus: new Tone.Chorus(),
+  // @TODO breaks FF
+  // chorus: new Tone.Chorus(),
   reverb: new Tone.Reverb()
 };
 
