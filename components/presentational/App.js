@@ -24,7 +24,7 @@ export default ({ children }) => (
       main {
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 20px);
+        height: 100vh;
         padding: 10px;
       }
     `}</style>

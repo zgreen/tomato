@@ -2,18 +2,16 @@ import { memo } from "react";
 import css from "styled-jsx/css";
 const { className, styles } = css.resolve`
 h1 {
-  color: transparent;
-  font-size: 50px;
+  font-size: 20px;
   font-weight: 400;
-  margin: 0;
+  margin: 0 0 0 auto;
   text-align: right;
-  text-shadow: 1px 0 tomato, 0 1px tomato, -1px 0 tomato, 0 -1px tomato;
 }
 `;
 
-export default memo(props => (
+export default memo(({ children, ...props }) => (
   <>
     {styles}
-    <h1 {...{ ...props, className }}>🍅</h1>
+    <h1 {...{ ...props, className }}>{children}🍅</h1>
   </>
 ));

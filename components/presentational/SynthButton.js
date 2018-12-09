@@ -5,7 +5,7 @@ const { className: innerClassName, styles: innerStyles } = css.resolve`
 span {
   align-items: center;
   display: flex;
-  height: 100px;
+  
   flex-direction: column;
   justify-content: center;
   pointer-events: none;

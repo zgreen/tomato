@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef, useReducer, useContext } from "react";
 import Button, { InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
+import Label, { Labels } from "./presentational/Label";
 import Keyboard from "./presentational/Keyboard";
 import Synth from "./presentational/Synth";
 import { ToneContext } from "./Start";
@@ -65,7 +66,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
-export default () => {
+export default memo(() => {
   const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
@@ -140,35 +141,41 @@ export default () => {
       // onMouseUp={onKeyUp}
     >
       <Controls>
-        <label>
-          Octave
-          <input
-            ref={rangeEl}
-            onChange={handleOctaveChange}
-            type="range"
-            min="0"
-            max="4"
-            value={octave}
-            step="1"
-          />
-        </label>
-        <label>
-          Oscillator
-          <select onChange={handleOscillatorChange} value={oscillator}>
-            {["sine", "square", "triangle", "sawtooth"].map(wave => (
-              <option key={wave} value={wave}>
-                {wave}
-              </option>
-            ))}
-          </select>
-        </label>
+        <Labels>
+          <Label>
+            Octave
+            <input
+              ref={rangeEl}
+              onChange={handleOctaveChange}
+              type="number"
+              min="0"
+              max="4"
+              value={octave}
+              step="1"
+            />
+          </Label>
+          <Label>
+            Oscillator
+            <select onChange={handleOscillatorChange} value={oscillator}>
+              {["sine", "square", "triangle", "sawtooth"].map(wave => (
+                <option key={wave} value={wave}>
+                  {wave}
+                </option>
+              ))}
+            </select>
+          </Label>
 
-        {Object.keys(effects).map(key => (
-          <label key={key}>
-            {key}
-            <input onChange={handleEffectChange} value={key} type="checkbox" />
-          </label>
-        ))}
+          {Object.keys(effects).map(key => (
+            <Label key={key}>
+              {key}
+              <input
+                onChange={handleEffectChange}
+                value={key}
+                type="checkbox"
+              />
+            </Label>
+          ))}
+        </Labels>
       </Controls>
       <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (
@@ -194,4 +201,4 @@ export default () => {
       </Keyboard>
     </Synth>
   );
-};
+});
