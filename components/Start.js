@@ -1,6 +1,10 @@
 import { createContext, memo, useContext, useState } from "react";
 import Tone from "tone";
+import Start from "./presentational/Start";
+import StartButton from "./presentational/StartButton";
+import styled from "./presentational/Styled";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+const { H1 } = styled;
 
 const effects = {
   "Bit Crusher": new Tone.BitCrusher(),
@@ -17,19 +21,16 @@ export default ({ children }) => {
     synth.triggerAttackRelease("C4", "8n");
     setDidStart(true);
   };
-  console.log("didStart", didStart);
   return didStart ? (
     children
   ) : (
-    <div>
-      <h1>Welcome to tomato synth.</h1>
-      <button
+    <Start>
+      <H1>Welcome to tomato synth.</H1>
+      <StartButton
         onClick={handleKeyUp}
         onKeyUp={handleKeyUp}
         onTouchEnd={handleKeyUp}
-      >
-        Get started 🍅
-      </button>
-    </div>
+      />
+    </Start>
   );
 };

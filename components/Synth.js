@@ -180,7 +180,7 @@ export default () => {
                 ? "tomato"
                 : "transparent",
               color: activeNotes.includes(notes[key])
-                ? "var(--black)"
+                ? "var(--brown)"
                 : "tomato",
               order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
             }}
