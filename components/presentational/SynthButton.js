@@ -14,28 +14,23 @@ span {
 
 export const InnerButton = memo(props => (
   <>
-    {/* {innerStyles}
-    <span {...{ ...props, className: innerClassName }} /> */}
+    {innerStyles}
+    <span {...{ ...props, className: innerClassName }} />
   </>
 ));
 
 const { className, styles } = css.resolve`
-div {
+button {
   appearance: none;
   background-color: transparent;
   border: 1px solid tomato;
   flex: 1 1 10%;
   padding: 0;
-  touch-action: none;
-}
-div * {
-  pointer-events: none;
-  touch-action: none;
 }
 `;
 export default props => (
   <>
     {styles}
-    <div {...{ ...props, className }} />
+    <button {...{ ...props, className }} />
   </>
 );
