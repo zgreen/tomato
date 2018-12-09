@@ -1,27 +1,10 @@
-import {
-  memo,
-  Fragment,
-  useEffect,
-  useRef,
-  useReducer,
-  useState,
-  useContext
-} from "react";
-// import Tone from "tone";
+import { memo, useEffect, useRef, useReducer, useContext } from "react";
 import Button, { InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
 import Keyboard from "./presentational/Keyboard";
 import Synth from "./presentational/Synth";
 import { ToneContext } from "./Start";
 import { chromaticKeyMap, keyboardKeys } from "../config";
-// const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-
-// const effects = {
-//   "Bit Crusher": new Tone.BitCrusher(),
-//   // @TODO breaks FF
-//   // chorus: new Tone.Chorus(),
-//   reverb: new Tone.Reverb()
-// };
 
 const initialState = {
   activeNotes: [],
@@ -120,21 +103,20 @@ export default () => {
     },
     [state]
   );
-  const onKeyDown = ({ key, target }) => {
-    if (!keyboardKeys.includes(key)) {
-      return;
-    }
+  const onKeyDown = e => {
+    const { key, target } = e;
     const targetKey = key || target.value;
-    if (notes[targetKey] === attack) {
+    if (!keyboardKeys.includes(targetKey) || notes[targetKey] === attack) {
       return;
     }
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
-  const onKeyUp = ({ key, target }) => {
-    if (!keyboardKeys.includes(key)) {
+  const onKeyUp = e => {
+    const { key, target } = e;
+    const targetKey = key || target.value;
+    if (!keyboardKeys.includes(targetKey)) {
       return;
     }
-    const targetKey = key || target.value;
     dispatch({ type: "release", payload: notes[targetKey] });
   };
   const handleEffectChange = ({ target: { value: payload } }) => {
@@ -147,12 +129,16 @@ export default () => {
   const handleOscillatorChange = ({ target: { value: payload } }) => {
     dispatch({ type: "oscillator", payload });
   };
-  const onButtonClick = () => {
-    inputEl.current.focus();
-  };
   console.log("state", state);
   return (
-    <Synth onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
+    <Synth
+      onTouchStart={onKeyDown}
+      onTouchEnd={onKeyUp}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
+      // onMouseDown={onKeyDown}
+      // onMouseUp={onKeyUp}
+    >
       <Controls>
         <label>
           Octave
@@ -187,10 +173,6 @@ export default () => {
       <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (
           <Button
-            onTouchStart={onKeyDown}
-            onTouchEnd={onKeyDown}
-            onMouseDown={onKeyDown}
-            onMouseUp={onKeyUp}
             key={key}
             value={key}
             style={{

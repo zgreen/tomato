@@ -24,8 +24,13 @@ button {
   appearance: none;
   background-color: transparent;
   border: 1px solid tomato;
-  flex: 1 1 10%;
+  flex: 0 0 10%;
+  margin: 0;
   padding: 0;
+  touch-action: none;
+}
+button * {
+  touch-action: none;
 }
 `;
 export default props => (
