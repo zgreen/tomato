@@ -1,3 +1,4 @@
+import Footer from "./Footer";
 export default ({ children }) => (
   <main>
     <style jsx global>{`
@@ -19,6 +20,9 @@ export default ({ children }) => (
           Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
         margin: 0;
       }
+      a {
+        color: tomato;
+      }
     `}</style>
     <style jsx>{`
       main {
@@ -29,5 +33,6 @@ export default ({ children }) => (
       }
     `}</style>
     {children}
+    <Footer />
   </main>
 );

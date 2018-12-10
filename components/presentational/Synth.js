@@ -5,6 +5,7 @@ div {
   flex-direction: column;
   display: flex;
   flex: 1 1 100%;
+  margin-bottom: 10px;
   width: 100%;
 }
 `;

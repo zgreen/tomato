@@ -9,8 +9,9 @@ const { H1, H2 } = styled;
 const effects = {
   "Bit Crusher": new Tone.BitCrusher(),
   Chorus: new Tone.Chorus(),
-  "Pitch Shift": new Tone.PitchShift(),
+  //"Pitch Shift": new Tone.PitchShift(),
   Reverb: new Tone.Freeverb()
+  // Tremolo: new Tone.Tremolo()
 };
 
 export const ToneContext = createContext({ synth, effects });
