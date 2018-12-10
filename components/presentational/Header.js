@@ -4,7 +4,7 @@ const { className, styles } = css.resolve`
 h1 {
   font-size: 20px;
   font-weight: 400;
-  margin: 0 0 0 auto;
+  margin: 0 10px 0 auto;
   text-align: right;
 }
 `;

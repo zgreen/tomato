@@ -34,7 +34,8 @@ export default ({ children }) => {
       />
       <em>
         This makes music when you play with it. Bail out now if that's not your
-        thing.
+        thing. Also, it's built for english language keyboards and touch
+        devices. Your results may vary.
       </em>
     </Start>
   );
