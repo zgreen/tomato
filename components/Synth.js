@@ -79,14 +79,6 @@ export default memo(() => {
     release,
     removeEffect
   } = state;
-  useEffect(() => {
-    window.ontouchstart = onKeyDown;
-    window.ontouchend = onKeyUp;
-    window.onkeydown = onKeyDown;
-    window.onkeyup = onKeyUp;
-    window.onmousedown = onKeyDown;
-    window.onmouseup = onKeyUp;
-  }, []);
   const notes = chromaticKeyMap(octave);
   useEffect(
     () => {
@@ -141,7 +133,15 @@ export default memo(() => {
   };
   console.log("state", state);
   return (
-    <Synth>
+    <Synth
+      containerTabIndex="0"
+      onTouchStart={onKeyDown}
+      onTouchEnd={onKeyUp}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
+      onMouseDown={onKeyDown}
+      onMouseUp={onKeyUp}
+    >
       <Controls>
         <Labels>
           <Label text="Octave">
