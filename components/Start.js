@@ -8,10 +8,9 @@ const { H1, H2 } = styled;
 
 const effects = {
   "Bit Crusher": new Tone.BitCrusher(),
-  // @TODO breaks FF
-  //chorus: new Tone.Chorus(),
-  reverb: new Tone.Reverb(),
-  "Pitch Shift": new Tone.PitchShift()
+  Chorus: new Tone.Chorus(),
+  "Pitch Shift": new Tone.PitchShift(),
+  Reverb: new Tone.Freeverb()
 };
 
 export const ToneContext = createContext({ synth, effects });
