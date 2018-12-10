@@ -1,22 +1,17 @@
-import { memo, Fragment, useEffect, useRef, useReducer } from "react";
-import Tone from "tone";
-import Button, { InnerButton } from "./presentational/SynthButton";
+import { memo, useEffect, useReducer, useContext } from "react";
+import BoxInput from "./presentational/BoxInput";
+import Button, { BasicButton, InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
+import Label, { Labels } from "./presentational/Label";
 import Keyboard from "./presentational/Keyboard";
 import Synth from "./presentational/Synth";
+import { ToneContext } from "./Start";
 import { chromaticKeyMap, keyboardKeys } from "../config";
-const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-
-const effects = {
-  "Bit Crusher": new Tone.BitCrusher(),
-  // @TODO breaks FF
-  // chorus: new Tone.Chorus(),
-  reverb: new Tone.Reverb()
-};
 
 const initialState = {
   activeNotes: [],
   addEffect: null,
+  displayControls: false,
   removeEffect: null,
   attack: null,
   release: null,
@@ -69,25 +64,30 @@ const reducer = (state, action) => {
         release: action.payload,
         attack: null
       };
+    case "toggleDisplayControls":
+      return {
+        ...state,
+        displayControls: action.payload,
+        attack: null,
+        release: null
+      };
     default:
       return state;
   }
 };
-export default () => {
+export default memo(() => {
+  const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     addEffect,
     activeNotes,
     attack,
+    displayControls,
     octave,
     oscillator,
     release,
     removeEffect
   } = state;
-  const rangeEl = useRef(null);
-  useEffect(() => {
-    rangeEl.current.focus();
-  }, []);
   const notes = chromaticKeyMap(octave);
   useEffect(
     () => {
@@ -110,21 +110,20 @@ export default () => {
     },
     [state]
   );
-  const onKeyDown = ({ key, target }) => {
-    if (!keyboardKeys.includes(key)) {
-      return;
-    }
+  const onKeyDown = e => {
+    const { key, target } = e;
     const targetKey = key || target.value;
-    if (notes[targetKey] === attack) {
+    if (!keyboardKeys.includes(targetKey) || notes[targetKey] === attack) {
       return;
     }
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
-  const onKeyUp = ({ key, target }) => {
-    if (!keyboardKeys.includes(key)) {
+  const onKeyUp = e => {
+    const { key, target } = e;
+    const targetKey = key || target.value;
+    if (!keyboardKeys.includes(targetKey)) {
       return;
     }
-    const targetKey = key || target.value;
     dispatch({ type: "release", payload: notes[targetKey] });
   };
   const handleEffectChange = ({ target: { value: payload } }) => {
@@ -132,55 +131,73 @@ export default () => {
     dispatch({ type, payload });
   };
   const handleOctaveChange = e => {
+    const payload = parseInt(e.target.value, 10);
+    if (Number.isNaN(payload)) {
+      return;
+    }
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
   };
   const handleOscillatorChange = ({ target: { value: payload } }) => {
     dispatch({ type: "oscillator", payload });
   };
-  const onButtonClick = () => {
-    inputEl.current.focus();
+  const toggleDisplayControls = e => {
+    e.preventDefault();
+    dispatch({ type: "toggleDisplayControls", payload: !displayControls });
   };
   console.log("state", state);
   return (
-    <Synth onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
+    <Synth
+      containerTabIndex="0"
+      onTouchStart={onKeyDown}
+      onTouchEnd={onKeyUp}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
+      onMouseDown={onKeyDown}
+      onMouseUp={onKeyUp}
+    >
       <Controls>
-        <label>
-          Octave
-          <input
-            ref={rangeEl}
-            onChange={handleOctaveChange}
-            type="range"
-            min="0"
-            max="4"
-            value={octave}
-            step="1"
-          />
-        </label>
-        <label>
-          Oscillator
-          <select onChange={handleOscillatorChange} value={oscillator}>
-            {["sine", "square", "triangle", "sawtooth"].map(wave => (
-              <option key={wave} value={wave}>
-                {wave}
-              </option>
+        <form onSubmit={toggleDisplayControls}>
+          <BasicButton type="submit">
+            {displayControls ? "Hide" : "Show"} controls ⚡️
+          </BasicButton>
+        </form>
+        {displayControls && (
+          <Labels>
+            <Label text="Octave">
+              <BoxInput
+                onChange={handleOctaveChange}
+                type="number"
+                min="0"
+                max="4"
+                value={octave}
+                step="1"
+              />
+            </Label>
+            <Label text="Oscillator">
+              <select onChange={handleOscillatorChange} value={oscillator}>
+                {["sine", "square", "triangle", "sawtooth"].map(wave => (
+                  <option key={wave} value={wave}>
+                    {wave}
+                  </option>
+                ))}
+              </select>
+            </Label>
+            <h2>Effects</h2>
+            {Object.keys(effects).map(key => (
+              <Label text={key} key={key}>
+                <input
+                  onChange={handleEffectChange}
+                  value={key}
+                  type="checkbox"
+                />
+              </Label>
             ))}
-          </select>
-        </label>
-
-        {Object.keys(effects).map(key => (
-          <label key={key}>
-            {key}
-            <input onChange={handleEffectChange} value={key} type="checkbox" />
-          </label>
-        ))}
+          </Labels>
+        )}
       </Controls>
       <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (
           <Button
-            onTouchStart={onKeyDown}
-            onTouchEnd={onKeyDown}
-            onMouseDown={onKeyDown}
-            onMouseUp={onKeyUp}
             key={key}
             value={key}
             style={{
@@ -188,7 +205,7 @@ export default () => {
                 ? "tomato"
                 : "transparent",
               color: activeNotes.includes(notes[key])
-                ? "var(--black)"
+                ? "var(--brown)"
                 : "tomato",
               order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
             }}
@@ -202,4 +219,4 @@ export default () => {
       </Keyboard>
     </Synth>
   );
-};
+});
