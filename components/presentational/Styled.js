@@ -12,6 +12,9 @@ const styles = {
   }`,
   h1: css.resolve`h1 {
     font-weight: normal
+  }`,
+  h2: css.resolve`h2 {
+    font-weight: normal
   }`
 };
 export default Object.entries(styles).reduce(

@@ -1,4 +1,5 @@
-import { memo, useEffect, useRef, useReducer, useContext } from "react";
+import { memo, useEffect, useReducer, useContext } from "react";
+import BoxInput from "./presentational/BoxInput";
 import Button, { InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
 import Label, { Labels } from "./presentational/Label";
@@ -78,9 +79,13 @@ export default memo(() => {
     release,
     removeEffect
   } = state;
-  const rangeEl = useRef({ current: { focus: () => {} } });
   useEffect(() => {
-    rangeEl.current.focus();
+    window.ontouchstart = onKeyDown;
+    window.ontouchend = onKeyUp;
+    window.onkeydown = onKeyDown;
+    window.onkeyup = onKeyUp;
+    window.onmousedown = onKeyDown;
+    window.onmouseup = onKeyUp;
   }, []);
   const notes = chromaticKeyMap(octave);
   useEffect(
@@ -125,6 +130,10 @@ export default memo(() => {
     dispatch({ type, payload });
   };
   const handleOctaveChange = e => {
+    const payload = parseInt(e.target.value, 10);
+    if (Number.isNaN(payload)) {
+      return;
+    }
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
   };
   const handleOscillatorChange = ({ target: { value: payload } }) => {
@@ -132,20 +141,11 @@ export default memo(() => {
   };
   console.log("state", state);
   return (
-    <Synth
-      onTouchStart={onKeyDown}
-      onTouchEnd={onKeyUp}
-      onKeyDown={onKeyDown}
-      onKeyUp={onKeyUp}
-      // onMouseDown={onKeyDown}
-      // onMouseUp={onKeyUp}
-    >
+    <Synth>
       <Controls>
         <Labels>
-          <Label>
-            Octave
-            <input
-              ref={rangeEl}
+          <Label text="Octave">
+            <BoxInput
               onChange={handleOctaveChange}
               type="number"
               min="0"
@@ -154,8 +154,7 @@ export default memo(() => {
               step="1"
             />
           </Label>
-          <Label>
-            Oscillator
+          <Label text="Oscillator">
             <select onChange={handleOscillatorChange} value={oscillator}>
               {["sine", "square", "triangle", "sawtooth"].map(wave => (
                 <option key={wave} value={wave}>
@@ -164,10 +163,9 @@ export default memo(() => {
               ))}
             </select>
           </Label>
-
+          <h2>Effects</h2>
           {Object.keys(effects).map(key => (
-            <Label key={key}>
-              {key}
+            <Label text={key} key={key}>
               <input
                 onChange={handleEffectChange}
                 value={key}

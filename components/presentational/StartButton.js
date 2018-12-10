@@ -5,7 +5,9 @@ const { Button } = styled;
 const inputStyles = css.resolve`
 button {
   border: 2px solid currentColor;
+  display: block;
   font-size: 20px;
+  margin-bottom: 20px;
   padding: 10px 20px;
 }
 `;
