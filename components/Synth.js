@@ -13,6 +13,7 @@ const initialState = {
   addEffect: null,
   displayControls: false,
   removeEffect: null,
+  isTouchEnabled: false,
   attack: null,
   release: null,
   octave: 2,
@@ -34,6 +35,13 @@ const reducer = (state, action) => {
         release: null,
         addEffect: action.payload,
         removeEffect: null
+      };
+    case "toggleIsTouchEnabled":
+      return {
+        ...state,
+        isTouchEnabled: action.payload,
+        attack: null,
+        release: null
       };
     case "removeEffect":
       return {
@@ -83,6 +91,7 @@ export default memo(() => {
     activeNotes,
     attack,
     displayControls,
+    isTouchEnabled,
     octave,
     oscillator,
     release,
@@ -111,7 +120,13 @@ export default memo(() => {
     [state]
   );
   const onKeyDown = e => {
-    const { key, target } = e;
+    const { key, target, type } = e;
+    if (isTouchEnabled && type === "mousedown") {
+      return;
+    }
+    if (!isTouchEnabled && type === "touchstart") {
+      dispatch({ type: "toggleIsTouchEnabled", payload: true });
+    }
     const targetKey = key || target.value;
     if (!keyboardKeys.includes(targetKey) || notes[targetKey] === attack) {
       return;
