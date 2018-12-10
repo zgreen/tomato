@@ -1,6 +1,6 @@
 import { memo, useEffect, useReducer, useContext } from "react";
 import BoxInput from "./presentational/BoxInput";
-import Button, { InnerButton } from "./presentational/SynthButton";
+import Button, { BasicButton, InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
 import Label, { Labels } from "./presentational/Label";
 import Keyboard from "./presentational/Keyboard";
@@ -11,6 +11,7 @@ import { chromaticKeyMap, keyboardKeys } from "../config";
 const initialState = {
   activeNotes: [],
   addEffect: null,
+  displayControls: false,
   removeEffect: null,
   attack: null,
   release: null,
@@ -63,6 +64,13 @@ const reducer = (state, action) => {
         release: action.payload,
         attack: null
       };
+    case "toggleDisplayControls":
+      return {
+        ...state,
+        displayControls: action.payload,
+        attack: null,
+        release: null
+      };
     default:
       return state;
   }
@@ -74,6 +82,7 @@ export default memo(() => {
     addEffect,
     activeNotes,
     attack,
+    displayControls,
     octave,
     oscillator,
     release,
@@ -131,6 +140,10 @@ export default memo(() => {
   const handleOscillatorChange = ({ target: { value: payload } }) => {
     dispatch({ type: "oscillator", payload });
   };
+  const toggleDisplayControls = e => {
+    e.preventDefault();
+    dispatch({ type: "toggleDisplayControls", payload: !displayControls });
+  };
   console.log("state", state);
   return (
     <Synth
@@ -143,37 +156,44 @@ export default memo(() => {
       onMouseUp={onKeyUp}
     >
       <Controls>
-        <Labels>
-          <Label text="Octave">
-            <BoxInput
-              onChange={handleOctaveChange}
-              type="number"
-              min="0"
-              max="4"
-              value={octave}
-              step="1"
-            />
-          </Label>
-          <Label text="Oscillator">
-            <select onChange={handleOscillatorChange} value={oscillator}>
-              {["sine", "square", "triangle", "sawtooth"].map(wave => (
-                <option key={wave} value={wave}>
-                  {wave}
-                </option>
-              ))}
-            </select>
-          </Label>
-          <h2>Effects</h2>
-          {Object.keys(effects).map(key => (
-            <Label text={key} key={key}>
-              <input
-                onChange={handleEffectChange}
-                value={key}
-                type="checkbox"
+        <form onSubmit={toggleDisplayControls}>
+          <BasicButton type="submit">
+            {displayControls ? "Hide" : "Show"} controls ⚡️
+          </BasicButton>
+        </form>
+        {displayControls && (
+          <Labels>
+            <Label text="Octave">
+              <BoxInput
+                onChange={handleOctaveChange}
+                type="number"
+                min="0"
+                max="4"
+                value={octave}
+                step="1"
               />
             </Label>
-          ))}
-        </Labels>
+            <Label text="Oscillator">
+              <select onChange={handleOscillatorChange} value={oscillator}>
+                {["sine", "square", "triangle", "sawtooth"].map(wave => (
+                  <option key={wave} value={wave}>
+                    {wave}
+                  </option>
+                ))}
+              </select>
+            </Label>
+            <h2>Effects</h2>
+            {Object.keys(effects).map(key => (
+              <Label text={key} key={key}>
+                <input
+                  onChange={handleEffectChange}
+                  value={key}
+                  type="checkbox"
+                />
+              </Label>
+            ))}
+          </Labels>
+        )}
       </Controls>
       <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (

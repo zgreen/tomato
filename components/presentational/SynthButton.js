@@ -1,6 +1,25 @@
 import { memo } from "react";
 import css from "styled-jsx/css";
 
+const { className: basicClassName, styles: basicStyles } = css.resolve`
+button {
+  appearance: none;
+  background-color: tomato;
+  border: 0;
+  color: var(--brown);
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+}
+`;
+
+export const BasicButton = memo(({ children, type }) => (
+  <>
+    {basicStyles}
+    <button {...{ className: basicClassName, type }}>{children}</button>
+  </>
+));
+
 const { className: innerClassName, styles: innerStyles } = css.resolve`
 span {
   align-items: center;
