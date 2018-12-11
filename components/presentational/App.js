@@ -33,8 +33,8 @@ export default ({ children }) => (
       main {
         display: flex;
         flex-direction: column;
-        height: 100vh;
-        flex: 1 0 100vh;
+        min-height: 100vh;
+        flex: 1 0 100%;
         padding: 10px;
       }
     `}</style>

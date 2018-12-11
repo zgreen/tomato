@@ -8,7 +8,7 @@ export default memo(({ children }) => (
       }
       .controls {
         display: flex;
-        flex: 1 0 auto;
+        flex: 0 1 auto;
         margin: 10px 0;
       }
     `}</style>
