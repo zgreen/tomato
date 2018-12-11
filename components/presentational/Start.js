@@ -4,7 +4,7 @@ export default memo(({ children }) => (
     <style jsx>{`
       div {
         margin: 10vh 0 0 10vw;
-        max-width: 40vw;
+        max-width: 50vw;
       }
     `}</style>
     {children}

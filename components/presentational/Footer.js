@@ -5,6 +5,7 @@ export default memo(() => (
     <style jsx>{`
       footer {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-around;
         margin-top: auto;
       }
@@ -14,6 +15,11 @@ export default memo(() => (
       h2,
       p {
         margin: 0;
+      }
+      @media (max-width: 800px) {
+        footer {
+          font-size: 12px;
+        }
       }
     `}</style>
     <p>
