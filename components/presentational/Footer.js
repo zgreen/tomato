@@ -23,9 +23,12 @@ export default memo(() => (
       Built with <a href="https://tonejs.github.io/">Tone.js</a> and{" "}
       <a href="https://nextjs.org/">Next.js</a>
     </p>
-    <Link href="/license">
-      <a>License</a>
-    </Link>
+    <p>
+      <a href="https://github.com/zgreen/tomato">GitHub</a>/
+      <Link href="/license">
+        <a>License</a>
+      </Link>
+    </p>
     <p>v1.0.0</p>
   </footer>
 ));
