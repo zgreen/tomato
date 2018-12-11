@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Footer from "./Footer";
 export default ({ children }) => (
   <main>
@@ -32,6 +33,16 @@ export default ({ children }) => (
         padding: 10px;
       }
     `}</style>
+    <Head>
+      <meta charSet="utf-8" />
+      <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+      <meta name="description" content="A tomato-powered web audio synth." />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+      <title>🍅 Synth</title>
+    </Head>
     {children}
     <Footer />
   </main>
