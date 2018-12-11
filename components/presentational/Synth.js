@@ -4,7 +4,7 @@ const { className, styles } = css.resolve`
 div {
   flex-direction: column;
   display: flex;
-  flex: 1 1 100%;
+  flex: 1 0 100%;
   margin-bottom: 10px;
   width: 100%;
 }
