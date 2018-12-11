@@ -24,12 +24,17 @@ export default ({ children }) => (
       a {
         color: tomato;
       }
+      #__next {
+        display: flex;
+        flex-direction: column;
+      }
     `}</style>
     <style jsx>{`
       main {
         display: flex;
         flex-direction: column;
         height: 100vh;
+        flex: 1 0 100vh;
         padding: 10px;
       }
     `}</style>
