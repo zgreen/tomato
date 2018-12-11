@@ -159,7 +159,7 @@ export default memo(() => {
     e.preventDefault();
     dispatch({ type: "toggleDisplayControls", payload: !displayControls });
   };
-  console.log("state", state);
+  // console.log("state", state);
   return (
     <Synth
       containerTabIndex="0"
