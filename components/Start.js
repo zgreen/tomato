@@ -19,7 +19,7 @@ export default ({ children }) => {
   const [didStart, setDidStart] = useState(false);
   const handleKeyUp = e => {
     e.preventDefault();
-    synth.triggerAttackRelease("C4", "8n");
+    synth.triggerAttackRelease(["C3", "E3", "G3", "B3"], "6n");
     setDidStart(true);
   };
   return didStart ? (
