@@ -24,7 +24,6 @@ const { className: innerClassName, styles: innerStyles } = css.resolve`
 span {
   align-items: center;
   display: flex;
-  
   flex-direction: column;
   justify-content: center;
   pointer-events: none;
@@ -46,10 +45,16 @@ button {
   flex: 0 0 10%;
   margin: 0;
   padding: 0;
-  touch-action: none;
 }
+button,
 button * {
   touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-callout: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-modify: none;
+  -webkit-highlight: none;
 }
 button * {
   pointer-events: none;
