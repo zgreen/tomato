@@ -13,6 +13,7 @@ const initialState = {
   addEffect: null,
   displayControls: false,
   removeEffect: null,
+  heldDisallowedKeys: [],
   isTouchEnabled: false,
   attack: null,
   release: null,
@@ -35,6 +36,13 @@ const reducer = (state, action) => {
         release: null,
         addEffect: action.payload,
         removeEffect: null
+      };
+    case "updateHeldDisallowedKeys":
+      return {
+        ...state,
+        attack: null,
+        release: null,
+        heldDisallowedKeys: action.payload
       };
     case "toggleIsTouchEnabled":
       return {
@@ -91,6 +99,7 @@ export default memo(() => {
     activeNotes,
     attack,
     displayControls,
+    heldDisallowedKeys,
     isTouchEnabled,
     octave,
     oscillator,
@@ -119,24 +128,39 @@ export default memo(() => {
     },
     [state]
   );
-  const onKeyDown = e => {
+  const handleAttack = e => {
     const { key, target, type } = e;
-    if (isTouchEnabled && type === "mousedown") {
+    const targetKey = key || target.value;
+    if (keyboardKeys.includes(targetKey) && heldDisallowedKeys.length === 0) {
+      e.preventDefault();
+    }
+    if (
+      (isTouchEnabled && type === "mousedown") ||
+      heldDisallowedKeys.length > 0 ||
+      notes[targetKey] === attack
+    ) {
       return;
     }
     if (!isTouchEnabled && type === "touchstart") {
       dispatch({ type: "toggleIsTouchEnabled", payload: true });
     }
-    const targetKey = key || target.value;
-    if (!keyboardKeys.includes(targetKey) || notes[targetKey] === attack) {
+    if (!keyboardKeys.includes(targetKey) && type === "keydown") {
+      dispatch({
+        type: "updateHeldDisallowedKeys",
+        payload: heldDisallowedKeys.concat(key)
+      });
       return;
     }
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
-  const onKeyUp = e => {
+  const handleRelease = e => {
     const { key, target } = e;
     const targetKey = key || target.value;
     if (!keyboardKeys.includes(targetKey)) {
+      dispatch({
+        type: "updateHeldDisallowedKeys",
+        payload: heldDisallowedKeys.filter(key => key !== targetKey)
+      });
       return;
     }
     dispatch({ type: "release", payload: notes[targetKey] });
@@ -159,16 +183,18 @@ export default memo(() => {
     e.preventDefault();
     dispatch({ type: "toggleDisplayControls", payload: !displayControls });
   };
-  // console.log("state", state);
+  if (process.env.NODE_ENV !== "production") {
+    console.log("state", state);
+  }
   return (
     <Synth
       containerTabIndex="0"
-      onTouchStart={onKeyDown}
-      onTouchEnd={onKeyUp}
-      onKeyDown={onKeyDown}
-      onKeyUp={onKeyUp}
-      onMouseDown={onKeyDown}
-      onMouseUp={onKeyUp}
+      onTouchStart={handleAttack}
+      onTouchEnd={handleRelease}
+      onKeyDown={handleAttack}
+      onKeyUp={handleRelease}
+      onMouseDown={handleAttack}
+      onMouseUp={handleRelease}
     >
       <Controls>
         <form onSubmit={toggleDisplayControls}>
