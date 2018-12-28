@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-## [1.0.0] - 2019-12-11
+## [1.0.1] - 2018-12-28
+
+### Changed
+
+- Calls `e.preventDefault()` for playable notes. This addresses https://github.com/zgreen/tomato/issues/1.
+
+## [1.0.0] - 2018-12-11
 
 ### Added
 
