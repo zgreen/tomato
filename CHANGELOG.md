@@ -27,3 +27,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Playing a note triggers an attack. The note will not be released until the corresponding event (`mouseup`, `touchend`, `keyup`) occurs.
 - Includes a few minimal controls. The intial octave may be changed, the oscillator can be toggled between `triangle`, `sine`, `square`, and `sawtooth`, and three effects may be toggled on/off: `Bit Crusher`, `Chorus`, `Revereb`.
 - The UI is responsive and should be playable on mobile/desktop.
+- Uses a development version (`r13-dev`) of Tone.js, to address a Firefox bug.
