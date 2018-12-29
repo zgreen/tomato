@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Calls `e.preventDefault()` for playable notes. This addresses https://github.com/zgreen/tomato/issues/1.
+- Calls `e.preventDefault()` for playable notes. This addresses https://github.com/zgreen/tomato/issues/1. Requires focussing the most recently played key.
 
 ## [1.0.0] - 2018-12-11
 

@@ -137,7 +137,7 @@ export default memo(() => {
   };
   const handleKeyDown = e => {
     const { key, target } = e;
-    if (!keyboardKeys.includes(key)) {
+    if (!keyboardKeys.includes(key) && !heldDisallowedKeys.includes(key)) {
       dispatch({
         type: "updateHeldDisallowedKeys",
         payload: heldDisallowedKeys.concat(key)
@@ -262,6 +262,7 @@ export default memo(() => {
       <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (
           <Button
+            shouldFocus={activeNotes[activeNotes.length - 1] === notes[key]}
             key={key}
             value={`play:${key}`}
             style={{

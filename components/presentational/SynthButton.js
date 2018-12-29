@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useRef } from "react";
 import css from "styled-jsx/css";
 
 const { className: basicClassName, styles: basicStyles } = css.resolve`
@@ -60,9 +60,18 @@ button * {
   pointer-events: none;
 }
 `;
-export default props => (
-  <>
-    {styles}
-    <button {...{ ...props, className }} />
-  </>
-);
+export default ({ shouldFocus, ...props }) => {
+  const ref = useRef(null);
+  const handleKeyDown = e => {
+    e.preventDefault();
+  };
+  if (shouldFocus) {
+    ref.current.focus();
+  }
+  return (
+    <>
+      {styles}
+      <button onKeyDown={handleKeyDown} {...{ ...props, className, ref }} />
+    </>
+  );
+};
