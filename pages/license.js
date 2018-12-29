@@ -1,10 +1,9 @@
-import { memo } from "react";
 import App from "../components/presentational/App";
 export default () => {
   const date = new Date();
   const year = date.getFullYear();
   return (
-    <App>
+    <App title="License">
       <h2>MIT License</h2>
       <article>
         <p>{`

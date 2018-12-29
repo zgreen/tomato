@@ -18,9 +18,13 @@
   "license": "MIT",
   "dependencies": {
     "lodash.capitalize": "^4.2.1",
+    "markdown-to-jsx": "^6.9.0",
     "next": "^7.0.2",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
     "tone": "^13.1.6"
+  },
+  "devDependencies": {
+    "raw-loader": "^1.0.0"
   }
 }

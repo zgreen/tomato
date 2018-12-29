@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Footer from "./Footer";
-export default ({ children }) => (
+export default ({ children, title }) => (
   <main>
     <style jsx global>{`
       :root {
@@ -46,7 +46,7 @@ export default ({ children }) => (
         name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
       />
-      <title>🍅 Synth</title>
+      <title>🍅 Synth{title && ` | ${title}`}</title>
     </Head>
     {children}
     <Footer />

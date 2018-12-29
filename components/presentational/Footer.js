@@ -36,6 +36,10 @@ export default memo(() => (
         <a>License</a>
       </Link>
     </p>
-    <p>{version}</p>
+    <p>
+      <Link href="/changelog">
+        <a>{version}</a>
+      </Link>
+    </p>
   </footer>
 ));
