@@ -128,34 +128,57 @@ export default memo(() => {
     },
     [state]
   );
-  const handleAttack = e => {
-    const { key, target, type } = e;
-    const targetKey = key || target.value;
-    if (keyboardKeys.includes(targetKey) && heldDisallowedKeys.length === 0) {
-      e.preventDefault();
+  const eventedSynthKey = e => {
+    const { key, target } = e;
+    if (!key && (!target.value || target.value.indexOf("play:") !== 0)) {
+      return "";
     }
-    if (
-      (isTouchEnabled && type === "mousedown") ||
-      heldDisallowedKeys.length > 0 ||
-      notes[targetKey] === attack
-    ) {
-      return;
-    }
-    if (!isTouchEnabled && type === "touchstart") {
-      dispatch({ type: "toggleIsTouchEnabled", payload: true });
-    }
-    if (!keyboardKeys.includes(targetKey) && type === "keydown") {
+    return key || target.value.slice(5);
+  };
+  const handleKeyDown = e => {
+    const { key, target } = e;
+    if (!keyboardKeys.includes(key)) {
       dispatch({
         type: "updateHeldDisallowedKeys",
         payload: heldDisallowedKeys.concat(key)
       });
       return;
+    } else if (
+      heldDisallowedKeys.length > 0 ||
+      !keyboardKeys.includes(key) ||
+      notes[key] === attack
+    ) {
+      return;
     }
+    e.preventDefault();
+    handleAttack(key);
+  };
+  const handleTouchStart = e => {
+    if (!isTouchEnabled) {
+      dispatch({ type: "toggleIsTouchEnabled", payload: true });
+    }
+    const targetKey = eventedSynthKey(e);
+    if (!keyboardKeys.includes(targetKey)) {
+      return;
+    }
+    handleAttack(targetKey);
+  };
+  const handleMouseDown = e => {
+    const targetKey = eventedSynthKey(e);
+    if (isTouchEnabled || !keyboardKeys.includes(targetKey)) {
+      return;
+    }
+    handleAttack(targetKey);
+  };
+  const handleAttack = targetKey => {
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
   const handleRelease = e => {
     const { key, target } = e;
-    const targetKey = key || target.value;
+    const targetKey = eventedSynthKey(e);
+    if (!targetKey) {
+      return;
+    }
     if (!keyboardKeys.includes(targetKey)) {
       dispatch({
         type: "updateHeldDisallowedKeys",
@@ -189,11 +212,11 @@ export default memo(() => {
   return (
     <Synth
       containerTabIndex="0"
-      onTouchStart={handleAttack}
+      onTouchStart={handleTouchStart}
       onTouchEnd={handleRelease}
-      onKeyDown={handleAttack}
+      onKeyDown={handleKeyDown}
       onKeyUp={handleRelease}
-      onMouseDown={handleAttack}
+      onMouseDown={handleMouseDown}
       onMouseUp={handleRelease}
     >
       <Controls>
@@ -240,7 +263,7 @@ export default memo(() => {
         {keyboardKeys.map((key, idx, arr) => (
           <Button
             key={key}
-            value={key}
+            value={`play:${key}`}
             style={{
               backgroundColor: activeNotes.includes(notes[key])
                 ? "tomato"
