@@ -7,6 +7,9 @@ export default ({ children, text, ...props }) => (
         font-weight: bold;
         margin-bottom: 10px;
       }
+      label:focus-within {
+        outline: 2px solid tomato;
+      }
       span {
         display: inline-block;
         margin-right: 5px;

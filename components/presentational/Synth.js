@@ -9,8 +9,12 @@ div {
   width: 100%;
 }
 `;
-export default memo(({ containerTabIndex, ...props }) => {
+export default memo(({ containerTabIndex, shouldFocus, ...props }) => {
   const divRef = useRef(null);
+  if (shouldFocus) {
+    console.log("should focus");
+    divRef.current.focus();
+  }
   useEffect(() => {
     divRef.current.focus();
   }, []);

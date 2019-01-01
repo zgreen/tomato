@@ -1,4 +1,4 @@
-import { memo, useEffect, useReducer, useContext } from "react";
+import { memo, useEffect, useReducer, useContext, useState } from "react";
 import BoxInput from "./presentational/BoxInput";
 import Button, { BasicButton, InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
@@ -71,7 +71,8 @@ const reducer = (state, action) => {
         ...state,
         attack: null,
         release: null,
-        oscillator: action.payload
+        oscillator: action.payload,
+        heldDisallowedKeys: []
       };
     case "release":
       return {
@@ -94,6 +95,7 @@ const reducer = (state, action) => {
 export default memo(() => {
   const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [shouldFocusContainer, setContainerFocus] = useState(false);
   const {
     addEffect,
     activeNotes,
@@ -128,6 +130,17 @@ export default memo(() => {
     },
     [state]
   );
+  useEffect(
+    () => {
+      if (activeNotes.length === 0 && release !== null) {
+        console.log(activeNotes.length, release);
+        setContainerFocus(true);
+      } else {
+        setContainerFocus(false);
+      }
+    },
+    [activeNotes, release]
+  );
   const eventedSynthKey = e => {
     const { key, target } = e;
     if (!key && (!target.value || target.value.indexOf("play:") !== 0)) {
@@ -150,6 +163,7 @@ export default memo(() => {
     ) {
       return;
     }
+    console.log("e.preventDefault()");
     e.preventDefault();
     handleAttack(key);
   };
@@ -212,6 +226,7 @@ export default memo(() => {
   return (
     <Synth
       containerTabIndex="0"
+      shouldFocus={shouldFocusContainer}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleRelease}
       onKeyDown={handleKeyDown}
