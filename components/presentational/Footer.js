@@ -1,5 +1,6 @@
 import { memo } from "react";
 import Link from "next/link";
+import { version } from "../../config";
 export default memo(() => (
   <footer>
     <style jsx>{`
@@ -35,6 +36,10 @@ export default memo(() => (
         <a>License</a>
       </Link>
     </p>
-    <p>v1.0.0</p>
+    <p>
+      <Link href="/changelog">
+        <a>{version}</a>
+      </Link>
+    </p>
   </footer>
 ));

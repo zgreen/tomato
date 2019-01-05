@@ -1,4 +1,4 @@
-import { memo, useEffect, useReducer, useContext } from "react";
+import { memo, useEffect, useReducer, useContext, useState } from "react";
 import BoxInput from "./presentational/BoxInput";
 import Button, { BasicButton, InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
@@ -13,6 +13,7 @@ const initialState = {
   addEffect: null,
   displayControls: false,
   removeEffect: null,
+  heldDisallowedKeys: [],
   isTouchEnabled: false,
   attack: null,
   release: null,
@@ -35,6 +36,13 @@ const reducer = (state, action) => {
         release: null,
         addEffect: action.payload,
         removeEffect: null
+      };
+    case "updateHeldDisallowedKeys":
+      return {
+        ...state,
+        attack: null,
+        release: null,
+        heldDisallowedKeys: action.payload
       };
     case "toggleIsTouchEnabled":
       return {
@@ -63,7 +71,8 @@ const reducer = (state, action) => {
         ...state,
         attack: null,
         release: null,
-        oscillator: action.payload
+        oscillator: action.payload,
+        heldDisallowedKeys: []
       };
     case "release":
       return {
@@ -86,11 +95,13 @@ const reducer = (state, action) => {
 export default memo(() => {
   const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [shouldFocusContainer, setContainerFocus] = useState(false);
   const {
     addEffect,
     activeNotes,
     attack,
     displayControls,
+    heldDisallowedKeys,
     isTouchEnabled,
     octave,
     oscillator,
@@ -119,24 +130,74 @@ export default memo(() => {
     },
     [state]
   );
-  const onKeyDown = e => {
-    const { key, target, type } = e;
-    if (isTouchEnabled && type === "mousedown") {
+  useEffect(
+    () => {
+      if (activeNotes.length === 0 && release !== null) {
+        console.log(activeNotes.length, release);
+        setContainerFocus(true);
+      } else {
+        setContainerFocus(false);
+      }
+    },
+    [activeNotes, release]
+  );
+  const eventedSynthKey = e => {
+    const { key, target } = e;
+    if (!key && (!target.value || target.value.indexOf("play:") !== 0)) {
+      return "";
+    }
+    return key || target.value.slice(5);
+  };
+  const handleKeyDown = e => {
+    const { key, target } = e;
+    if (!keyboardKeys.includes(key) && !heldDisallowedKeys.includes(key)) {
+      dispatch({
+        type: "updateHeldDisallowedKeys",
+        payload: heldDisallowedKeys.concat(key)
+      });
+      return;
+    } else if (
+      heldDisallowedKeys.length > 0 ||
+      !keyboardKeys.includes(key) ||
+      notes[key] === attack
+    ) {
       return;
     }
-    if (!isTouchEnabled && type === "touchstart") {
+    console.log("e.preventDefault()");
+    e.preventDefault();
+    handleAttack(key);
+  };
+  const handleTouchStart = e => {
+    if (!isTouchEnabled) {
       dispatch({ type: "toggleIsTouchEnabled", payload: true });
     }
-    const targetKey = key || target.value;
-    if (!keyboardKeys.includes(targetKey) || notes[targetKey] === attack) {
+    const targetKey = eventedSynthKey(e);
+    if (!keyboardKeys.includes(targetKey)) {
       return;
     }
+    handleAttack(targetKey);
+  };
+  const handleMouseDown = e => {
+    const targetKey = eventedSynthKey(e);
+    if (isTouchEnabled || !keyboardKeys.includes(targetKey)) {
+      return;
+    }
+    handleAttack(targetKey);
+  };
+  const handleAttack = targetKey => {
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
-  const onKeyUp = e => {
+  const handleRelease = e => {
     const { key, target } = e;
-    const targetKey = key || target.value;
+    const targetKey = eventedSynthKey(e);
+    if (!targetKey) {
+      return;
+    }
     if (!keyboardKeys.includes(targetKey)) {
+      dispatch({
+        type: "updateHeldDisallowedKeys",
+        payload: heldDisallowedKeys.filter(key => key !== targetKey)
+      });
       return;
     }
     dispatch({ type: "release", payload: notes[targetKey] });
@@ -159,16 +220,19 @@ export default memo(() => {
     e.preventDefault();
     dispatch({ type: "toggleDisplayControls", payload: !displayControls });
   };
-  // console.log("state", state);
+  if (process.env.NODE_ENV !== "production") {
+    console.log("state", state);
+  }
   return (
     <Synth
       containerTabIndex="0"
-      onTouchStart={onKeyDown}
-      onTouchEnd={onKeyUp}
-      onKeyDown={onKeyDown}
-      onKeyUp={onKeyUp}
-      onMouseDown={onKeyDown}
-      onMouseUp={onKeyUp}
+      shouldFocus={shouldFocusContainer}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleRelease}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleRelease}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleRelease}
     >
       <Controls>
         <form onSubmit={toggleDisplayControls}>
@@ -213,8 +277,9 @@ export default memo(() => {
       <Keyboard>
         {keyboardKeys.map((key, idx, arr) => (
           <Button
+            shouldFocus={activeNotes[activeNotes.length - 1] === notes[key]}
             key={key}
-            value={key}
+            value={`play:${key}`}
             style={{
               backgroundColor: activeNotes.includes(notes[key])
                 ? "tomato"

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useRef } from "react";
 import css from "styled-jsx/css";
 
 const { className: basicClassName, styles: basicStyles } = css.resolve`
@@ -24,7 +24,6 @@ const { className: innerClassName, styles: innerStyles } = css.resolve`
 span {
   align-items: center;
   display: flex;
-  
   flex-direction: column;
   justify-content: center;
   pointer-events: none;
@@ -46,18 +45,33 @@ button {
   flex: 0 0 10%;
   margin: 0;
   padding: 0;
-  touch-action: none;
 }
+button,
 button * {
   touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-callout: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-modify: none;
+  -webkit-highlight: none;
 }
 button * {
   pointer-events: none;
 }
 `;
-export default props => (
-  <>
-    {styles}
-    <button {...{ ...props, className }} />
-  </>
-);
+export default ({ shouldFocus, ...props }) => {
+  const ref = useRef(null);
+  const handleKeyDown = e => {
+    e.preventDefault();
+  };
+  if (shouldFocus) {
+    ref.current.focus();
+  }
+  return (
+    <>
+      {styles}
+      <button onKeyDown={handleKeyDown} {...{ ...props, className, ref }} />
+    </>
+  );
+};
