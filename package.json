@@ -18,14 +18,15 @@
   "author": "Zach Green",
   "license": "MIT",
   "dependencies": {
+    "eslint": "^6.5.1",
     "lodash.capitalize": "^4.2.1",
-    "markdown-to-jsx": "^6.9.0",
-    "next": "^8.0.0-canary.2",
-    "react": "^16.7.0-alpha.2",
-    "react-dom": "^16.7.0-alpha.2",
-    "tone": "^13.1.6"
+    "markdown-to-jsx": "^6.10.3",
+    "next": "^9.1.1",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "tone": "^13.8.25"
   },
   "devDependencies": {
-    "raw-loader": "^1.0.0"
+    "raw-loader": "^3.1.0"
   }
 }
