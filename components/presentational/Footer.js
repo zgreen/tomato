@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Link from "next/link";
-import { version } from "../../config";
+import { version } from "../../package.json";
 export default memo(() => (
   <footer>
     <style jsx>{`

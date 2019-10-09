@@ -1,4 +1,3 @@
-export const version = "v1.0.1";
 const notes = ["c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"];
 export const keyboardKeys = [
   "z",
