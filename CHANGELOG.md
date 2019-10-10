@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/zgreen/tomato/compare/v1.0.2...v1.0.3) (2019-10-10)
+
+
+### Bug Fixes
+
+* read version from package.json ([40a3540](https://github.com/zgreen/tomato/commit/40a3540aeab7732cd67c359f54dda29aeb86adcd))
+
 ### 1.0.2 (2019-10-09)
 
 ## [1.0.1] - 2019-01-05
