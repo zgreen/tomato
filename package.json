@@ -19,7 +19,6 @@
   "author": "Zach Green",
   "license": "MIT",
   "dependencies": {
-    "eslint": "^6.5.1",
     "lodash.capitalize": "^4.2.1",
     "markdown-to-jsx": "^6.10.3",
     "next": "^9.1.1",
@@ -28,6 +27,11 @@
     "tone": "^13.8.25"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.1.2",
     "raw-loader": "^3.1.0",
     "standard-version": "^7.0.0"
   }

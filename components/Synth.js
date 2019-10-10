@@ -109,38 +109,32 @@ export default memo(() => {
     removeEffect
   } = state;
   const notes = chromaticKeyMap(octave);
-  useEffect(
-    () => {
-      if (attack) {
-        synth.triggerAttack(attack);
-      }
-      if (release) {
-        synth.triggerRelease(release);
-      }
-      if (oscillator) {
-        synth.set({ oscillator: { type: oscillator } });
-      }
-      if (addEffect) {
-        effects[addEffect].toMaster();
-        synth.connect(effects[addEffect]);
-      }
-      if (removeEffect) {
-        effects[removeEffect].disconnect();
-      }
-    },
-    [state]
-  );
-  useEffect(
-    () => {
-      if (activeNotes.length === 0 && release !== null) {
-        console.log(activeNotes.length, release);
-        setContainerFocus(true);
-      } else {
-        setContainerFocus(false);
-      }
-    },
-    [activeNotes, release]
-  );
+  useEffect(() => {
+    if (attack) {
+      synth.triggerAttack(attack);
+    }
+    if (release) {
+      synth.triggerRelease(release);
+    }
+    if (oscillator) {
+      synth.set({ oscillator: { type: oscillator } });
+    }
+    if (addEffect) {
+      effects[addEffect].toMaster();
+      synth.connect(effects[addEffect]);
+    }
+    if (removeEffect) {
+      effects[removeEffect].disconnect();
+    }
+  }, [addEffect, attack, effects, oscillator, release, removeEffect, state, synth]);
+  useEffect(() => {
+    if (activeNotes.length === 0 && release !== null) {
+      console.log(activeNotes.length, release);
+      setContainerFocus(true);
+    } else {
+      setContainerFocus(false);
+    }
+  }, [activeNotes, release]);
   const eventedSynthKey = e => {
     const { key, target } = e;
     if (!key && (!target.value || target.value.indexOf("play:") !== 0)) {
