@@ -7,6 +7,7 @@ import Keyboard from "./presentational/Keyboard";
 import Synth from "./presentational/Synth";
 import { ToneContext } from "./Start";
 import { chromaticKeyMap, keyboardKeys } from "../config";
+import Debug from "./Debug";
 
 const initialState = {
   activeNotes: [],
@@ -214,9 +215,6 @@ export default memo(() => {
     e.preventDefault();
     dispatch({ type: "toggleDisplayControls", payload: !displayControls });
   };
-  if (process.env.NODE_ENV !== "production") {
-    console.log("state", state);
-  }
   return (
     <Synth
       containerTabIndex="0"
@@ -228,6 +226,7 @@ export default memo(() => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleRelease}
     >
+      <Debug {...{ state }} />
       <Controls>
         <form onSubmit={toggleDisplayControls}>
           <BasicButton type="submit">
