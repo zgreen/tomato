@@ -1,4 +1,4 @@
-import { memo, useEffect, useReducer, useContext, useState } from "react";
+import { useEffect, useReducer, useContext, useState } from "react";
 import BoxInput from "./presentational/BoxInput";
 import Button, { BasicButton, InnerButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
@@ -33,49 +33,39 @@ const reducer = (state, action) => {
     case "addEffect":
       return {
         ...state,
-        attack: null,
-        release: null,
         addEffect: action.payload,
-        removeEffect: null
+        removeEffect: null,
+        release: null
       };
     case "updateHeldDisallowedKeys":
       return {
         ...state,
-        attack: null,
-        release: null,
         heldDisallowedKeys: action.payload
       };
     case "toggleIsTouchEnabled":
       return {
         ...state,
-        isTouchEnabled: action.payload,
-        attack: null,
-        release: null
+        isTouchEnabled: action.payload
       };
     case "removeEffect":
       return {
         ...state,
-        attack: null,
-        release: null,
         addEffect: null,
         removeEffect: action.payload
       };
     case "octave":
       return {
         ...state,
-        attack: null,
-        release: null,
         octave: action.payload
       };
     case "oscillator":
       return {
         ...state,
-        attack: null,
-        release: null,
         oscillator: action.payload,
         heldDisallowedKeys: []
       };
     case "release":
+      console.log("release");
       return {
         ...state,
         activeNotes: state.activeNotes.filter(note => note !== action.payload),
@@ -85,15 +75,13 @@ const reducer = (state, action) => {
     case "toggleDisplayControls":
       return {
         ...state,
-        displayControls: action.payload,
-        attack: null,
-        release: null
+        displayControls: action.payload
       };
     default:
       return state;
   }
 };
-export default memo(() => {
+const App = () => {
   const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [shouldFocusContainer, setContainerFocus] = useState(false);
@@ -111,26 +99,38 @@ export default memo(() => {
   } = state;
   const notes = chromaticKeyMap(octave);
   useEffect(() => {
-    if (attack) {
-      synth.triggerAttack(attack);
+    if (!attack) {
+      return;
     }
-    if (release) {
-      synth.triggerRelease(release);
+    synth.triggerAttack(attack);
+  }, [attack, synth]);
+  useEffect(() => {
+    if (!release) {
+      return;
     }
-    if (oscillator) {
-      synth.set({ oscillator: { type: oscillator } });
+    synth.triggerRelease(release);
+  }, [release, synth]);
+  useEffect(() => {
+    if (!oscillator) {
+      return;
     }
-    if (addEffect) {
-      effects[addEffect].toMaster();
-      synth.connect(effects[addEffect]);
+    synth.set({ oscillator: { type: oscillator } });
+  }, [oscillator, synth]);
+  useEffect(() => {
+    if (!addEffect) {
+      return;
     }
-    if (removeEffect) {
-      effects[removeEffect].disconnect();
+    effects[addEffect].toMaster();
+    synth.connect(effects[addEffect]);
+  }, [effects, addEffect, synth]);
+  useEffect(() => {
+    if (!removeEffect) {
+      return;
     }
-  }, [addEffect, attack, effects, oscillator, release, removeEffect, state, synth]);
+    effects[removeEffect].disconnect();
+  }, [effects, removeEffect, synth]);
   useEffect(() => {
     if (activeNotes.length === 0 && release !== null) {
-      console.log(activeNotes.length, release);
       setContainerFocus(true);
     } else {
       setContainerFocus(false);
@@ -144,7 +144,7 @@ export default memo(() => {
     return key || target.value.slice(5);
   };
   const handleKeyDown = e => {
-    const { key, target } = e;
+    const { key } = e;
     if (!keyboardKeys.includes(key) && !heldDisallowedKeys.includes(key)) {
       dispatch({
         type: "updateHeldDisallowedKeys",
@@ -158,7 +158,6 @@ export default memo(() => {
     ) {
       return;
     }
-    console.log("e.preventDefault()");
     e.preventDefault();
     handleAttack(key);
   };
@@ -183,7 +182,6 @@ export default memo(() => {
     dispatch({ type: "attack", payload: notes[targetKey] });
   };
   const handleRelease = e => {
-    const { key, target } = e;
     const targetKey = eventedSynthKey(e);
     if (!targetKey) {
       return;
@@ -208,9 +206,8 @@ export default memo(() => {
     }
     dispatch({ type: "octave", payload: parseInt(e.target.value, 10) });
   };
-  const handleOscillatorChange = ({ target: { value: payload } }) => {
+  const handleOscillatorChange = ({ target: { value: payload } }) =>
     dispatch({ type: "oscillator", payload });
-  };
   const toggleDisplayControls = e => {
     e.preventDefault();
     dispatch({ type: "toggleDisplayControls", payload: !displayControls });
@@ -292,4 +289,6 @@ export default memo(() => {
       </Keyboard>
     </Synth>
   );
-});
+};
+
+export default App;
