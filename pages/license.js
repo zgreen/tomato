@@ -8,7 +8,7 @@ export default () => {
       <article>
         <p>{`
 The MIT License (MIT)
-Copyright (c) ${year} Zachary Green`}</p>
+Copyright (c) 2018-${year} Zachary Green`}</p>
         <p>{`
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
