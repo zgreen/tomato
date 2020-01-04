@@ -1,6 +1,6 @@
 # 🍅 Synth
 
-A tomato-powered web audio synth. 🍅 https://tomatosynth.now.sh
+A tomato-powered web audio synth. 🍅 https://tomato.zgreen.now.sh/
 
 Built with Tone.js and Next.js.
 
