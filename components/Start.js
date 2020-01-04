@@ -1,17 +1,18 @@
-import { createContext, memo, useContext, useState } from "react";
+import { createContext, useState } from "react";
 import Tone from "tone";
 import Start from "./presentational/Start";
 import StartButton from "./presentational/StartButton";
 import styled from "./presentational/Styled";
 const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-const { H1, H2 } = styled;
+const { H1 } = styled;
 
 const effects = {
   "Bit Crusher": new Tone.BitCrusher(),
   Chorus: new Tone.Chorus(),
   //"Pitch Shift": new Tone.PitchShift(),
-  Reverb: new Tone.Freeverb()
+  Reverb: new Tone.Freeverb(),
   // Tremolo: new Tone.Tremolo()
+  PingPongDelay: new Tone.PingPongDelay()
 };
 
 export const ToneContext = createContext({ synth, effects });
