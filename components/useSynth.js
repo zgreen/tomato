@@ -138,6 +138,10 @@ function useSynth() {
   };
   const handleKeyDown = e => {
     const { key } = e;
+    // Always prevent `/` from opening text search in firefox
+    if (key === "/") {
+      e.preventDefault();
+    }
     if (!keyboardKeys.includes(key) && !heldDisallowedKeys.includes(key)) {
       dispatch({
         type: "updateHeldDisallowedKeys",
