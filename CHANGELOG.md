@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/zgreen/tomato/compare/v1.1.0...v1.1.1) (2020-01-04)
+
+
+### Bug Fixes
+
+* add license year ([be61371](https://github.com/zgreen/tomato/commit/be613713e1d678cdf296d0a5ea13000717dbdc6d))
+* firefox `/` key opens text search ([f4be3f2](https://github.com/zgreen/tomato/commit/f4be3f25c5a0715881d5f96aa8f3db3955631aa5))
+* lost effect checked state ([8f69333](https://github.com/zgreen/tomato/commit/8f6933322bd3f3f1e88926bcdc6970e0d71ecb54))
+
 ## [1.1.0](https://github.com/zgreen/tomato/compare/v1.0.3...v1.1.0) (2020-01-04)
 
 
