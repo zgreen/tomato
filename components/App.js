@@ -24,7 +24,13 @@ const App = () => {
     handleOscillatorChange,
     toggleDisplayControls
   } = useSynth();
-  const { activeNotes, displayControls, octave, oscillator } = state;
+  const {
+    activeNotes,
+    displayControls,
+    octave,
+    oscillator,
+    activeEffects
+  } = state;
   const notes = chromaticKeyMap(octave);
 
   return (
@@ -73,6 +79,7 @@ const App = () => {
                   onChange={handleEffectChange}
                   value={key}
                   type="checkbox"
+                  checked={activeEffects.includes(key)}
                 />
               </Label>
             ))}

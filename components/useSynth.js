@@ -5,6 +5,7 @@ import { chromaticKeyMap, keyboardKeys } from "../config";
 const initialState = {
   activeNotes: [],
   addEffect: null,
+  activeEffects: [],
   displayControls: false,
   removeEffect: null,
   heldDisallowedKeys: [],
@@ -27,6 +28,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         addEffect: action.payload,
+        activeEffects: state.activeEffects.concat(action.payload),
         removeEffect: null,
         release: null
       };
@@ -44,6 +46,9 @@ const reducer = (state, action) => {
       return {
         ...state,
         addEffect: null,
+        activeEffects: state.activeEffects.filter(
+          effect => effect !== action.payload
+        ),
         removeEffect: action.payload
       };
     case "octave":
