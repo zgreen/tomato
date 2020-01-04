@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import App from "../components/presentational/App";
-import Header from "../components/presentational/Header";
 import Loading from "../components/presentational/Loading";
 
 const Start = dynamic(() => import("../components/Start"), {

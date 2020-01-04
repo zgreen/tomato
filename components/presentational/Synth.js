@@ -9,7 +9,7 @@ const { className, styles } = css.resolve`
     width: 100%;
   }
 `;
-const Synth = ({ containerTabIndex, shouldFocus, ...props }) => {
+const Synth = ({ shouldFocus, ...props }) => {
   const divRef = useRef(null);
   useEffect(() => {
     divRef.current.focus();
@@ -17,11 +17,7 @@ const Synth = ({ containerTabIndex, shouldFocus, ...props }) => {
   return (
     <>
       {styles}
-      <div
-        ref={divRef}
-        tabIndex={containerTabIndex}
-        {...{ ...props, className }}
-      />
+      <div id="playable-container" ref={divRef} {...{ ...props, className }} />
     </>
   );
 };

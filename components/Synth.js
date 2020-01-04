@@ -65,7 +65,6 @@ const reducer = (state, action) => {
         heldDisallowedKeys: []
       };
     case "release":
-      console.log("release");
       return {
         ...state,
         activeNotes: state.activeNotes.filter(note => note !== action.payload),
@@ -130,11 +129,7 @@ const App = () => {
     effects[removeEffect].disconnect();
   }, [effects, removeEffect, synth]);
   useEffect(() => {
-    if (activeNotes.length === 0 && release !== null) {
-      setContainerFocus(true);
-    } else {
-      setContainerFocus(false);
-    }
+    setContainerFocus(activeNotes.length === 0 && release !== null);
   }, [activeNotes, release]);
   const eventedSynthKey = e => {
     const { key, target } = e;
@@ -214,7 +209,7 @@ const App = () => {
   };
   return (
     <Synth
-      containerTabIndex="0"
+      tabIndex="0"
       shouldFocus={shouldFocusContainer}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleRelease}
