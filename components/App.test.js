@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, prettyDOM } from "@testing-library/react";
-import App from "./Synth";
+import App from "./App";
 
 describe("app", () => {
   it("has correct focus", () => {

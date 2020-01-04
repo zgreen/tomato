@@ -6,7 +6,7 @@ const Start = dynamic(() => import("../components/Start"), {
   loading: Loading,
   ssr: false
 });
-const Synth = dynamic(() => import("../components/Synth"), {
+const Synth = dynamic(() => import("../components/App"), {
   loading: Loading,
   ssr: false
 });

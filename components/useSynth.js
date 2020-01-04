@@ -1,13 +1,6 @@
-import { useEffect, useReducer, useContext, useState } from "react";
-import BoxInput from "./presentational/BoxInput";
-import Button, { BasicButton, InnerButton } from "./presentational/SynthButton";
-import Controls from "./presentational/Controls";
-import Label, { Labels } from "./presentational/Label";
-import Keyboard from "./presentational/Keyboard";
-import Synth from "./presentational/Synth";
+import { useEffect, useContext, useReducer, useState } from "react";
 import { ToneContext } from "./Start";
 import { chromaticKeyMap, keyboardKeys } from "../config";
-import Debug from "./Debug";
 
 const initialState = {
   activeNotes: [],
@@ -80,10 +73,12 @@ const reducer = (state, action) => {
       return state;
   }
 };
-const App = () => {
+
+function useSynth() {
   const { synth, effects } = useContext(ToneContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [shouldFocusContainer, setContainerFocus] = useState(false);
+
   const {
     addEffect,
     activeNotes,
@@ -96,7 +91,9 @@ const App = () => {
     release,
     removeEffect
   } = state;
+
   const notes = chromaticKeyMap(octave);
+
   useEffect(() => {
     if (!attack) {
       return;
@@ -131,6 +128,7 @@ const App = () => {
   useEffect(() => {
     setContainerFocus(activeNotes.length === 0 && release !== null);
   }, [activeNotes, release]);
+
   const eventedSynthKey = e => {
     const { key, target } = e;
     if (!key && (!target.value || target.value.indexOf("play:") !== 0)) {
@@ -207,83 +205,19 @@ const App = () => {
     e.preventDefault();
     dispatch({ type: "toggleDisplayControls", payload: !displayControls });
   };
-  return (
-    <Synth
-      tabIndex="0"
-      shouldFocus={shouldFocusContainer}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleRelease}
-      onKeyDown={handleKeyDown}
-      onKeyUp={handleRelease}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleRelease}
-    >
-      <Debug {...{ state }} />
-      <Controls>
-        <form onSubmit={toggleDisplayControls}>
-          <BasicButton type="submit">
-            {displayControls ? "Hide" : "Show"} controls ⚡️
-          </BasicButton>
-        </form>
-        {displayControls && (
-          <Labels>
-            <Label text="Octave">
-              <BoxInput
-                onChange={handleOctaveChange}
-                type="number"
-                min="0"
-                max="4"
-                value={octave}
-                step="1"
-              />
-            </Label>
-            <Label text="Oscillator">
-              <select onChange={handleOscillatorChange} value={oscillator}>
-                {["sine", "square", "triangle", "sawtooth"].map(wave => (
-                  <option key={wave} value={wave}>
-                    {wave}
-                  </option>
-                ))}
-              </select>
-            </Label>
-            <h2>Effects</h2>
-            {Object.keys(effects).map(key => (
-              <Label text={key} key={key}>
-                <input
-                  onChange={handleEffectChange}
-                  value={key}
-                  type="checkbox"
-                />
-              </Label>
-            ))}
-          </Labels>
-        )}
-      </Controls>
-      <Keyboard>
-        {keyboardKeys.map((key, idx, arr) => (
-          <Button
-            shouldFocus={activeNotes[activeNotes.length - 1] === notes[key]}
-            key={key}
-            value={`play:${key}`}
-            style={{
-              backgroundColor: activeNotes.includes(notes[key])
-                ? "tomato"
-                : "transparent",
-              color: activeNotes.includes(notes[key])
-                ? "var(--brown)"
-                : "tomato",
-              order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
-            }}
-          >
-            <InnerButton>
-              {key}
-              <h2>{notes[key]}</h2>
-            </InnerButton>
-          </Button>
-        ))}
-      </Keyboard>
-    </Synth>
-  );
-};
 
-export default App;
+  return {
+    state,
+    shouldFocusContainer,
+    handleKeyDown,
+    handleTouchStart,
+    handleMouseDown,
+    handleRelease,
+    handleEffectChange,
+    handleOctaveChange,
+    handleOscillatorChange,
+    toggleDisplayControls
+  };
+}
+
+export default useSynth;
