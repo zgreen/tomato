@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/zgreen/tomato/compare/v1.0.3...v1.1.0) (2020-01-04)
+
+
+### Features
+
+* add PingPongDelay ([f3688fa](https://github.com/zgreen/tomato/commit/f3688fa2580a56aacb18ee0d2d6b0e798685ae0b))
+* Debug component ([931f203](https://github.com/zgreen/tomato/commit/931f2039cc3b3863aabbfc7d2a5f29f13f856bf0))
+
+
+### Bug Fixes
+
+* simpler should focus logic ([698ea20](https://github.com/zgreen/tomato/commit/698ea20a1acd254f7e09f2a870f2e6a4e29c08e9))
+
 ### [1.0.3](https://github.com/zgreen/tomato/compare/v1.0.2...v1.0.3) (2019-10-10)
 
 
