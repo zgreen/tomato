@@ -1,9 +1,9 @@
-import App from "../components/presentational/App";
+import { Page } from "../components/Page";
 export default () => {
   const date = new Date();
   const year = date.getFullYear();
   return (
-    <App title="License">
+    <Page title="License">
       <h2>MIT License</h2>
       <article>
         <p>{`
@@ -27,6 +27,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.`}</p>
       </article>
-    </App>
+    </Page>
   );
 };

@@ -1,10 +1,10 @@
 import Markdown from "markdown-to-jsx";
-import App from "../components/presentational/App";
+import { Page } from "../components/Page";
 import changelog from "../CHANGELOG.md";
 export default () => {
   return (
-    <App title="Changelog">
+    <Page title="Changelog">
       <Markdown>{changelog}</Markdown>
-    </App>
+    </Page>
   );
 };
