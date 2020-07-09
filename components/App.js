@@ -8,7 +8,7 @@ import Synth from "./presentational/Synth";
 import { ToneContext } from "./Start";
 import { chromaticKeyMap, keyboardKeys } from "../config";
 import Debug from "./Debug";
-import useSynth from "./useSynth";
+import useSynth from "./Synth";
 
 const App = () => {
   const { effects } = useContext(ToneContext);
@@ -22,14 +22,14 @@ const App = () => {
     handleEffectChange,
     handleOctaveChange,
     handleOscillatorChange,
-    toggleDisplayControls
+    toggleDisplayControls,
   } = useSynth();
   const {
     activeNotes,
     displayControls,
     octave,
     oscillator,
-    activeEffects
+    activeEffects,
   } = state;
   const notes = chromaticKeyMap(octave);
 
@@ -65,7 +65,7 @@ const App = () => {
             </Label>
             <Label text="Oscillator">
               <select onChange={handleOscillatorChange} value={oscillator}>
-                {["sine", "square", "triangle", "sawtooth"].map(wave => (
+                {["sine", "square", "triangle", "sawtooth"].map((wave) => (
                   <option key={wave} value={wave}>
                     {wave}
                   </option>
@@ -73,7 +73,7 @@ const App = () => {
               </select>
             </Label>
             <h2>Effects</h2>
-            {Object.keys(effects).map(key => (
+            {Object.keys(effects).map((key) => (
               <Label text={key} key={key}>
                 <input
                   onChange={handleEffectChange}
@@ -99,7 +99,7 @@ const App = () => {
               color: activeNotes.includes(notes[key])
                 ? "var(--brown)"
                 : "tomato",
-              order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10))
+              order: arr.length - (10 * Math.ceil((idx + 1) / 10) - (idx % 10)),
             }}
           >
             <InnerButton>
