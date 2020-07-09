@@ -1,20 +1,16 @@
 import dynamic from "next/dynamic";
-import App from "../components/presentational/App";
+import { Page } from "../components/Page";
 import Loading from "../components/presentational/Loading";
 
 const Start = dynamic(() => import("../components/Start"), {
   loading: Loading,
-  ssr: false
-});
-const Synth = dynamic(() => import("../components/App"), {
-  loading: Loading,
-  ssr: false
+  ssr: false,
 });
 
-export default () => (
-  <App>
-    <Start>
-      <Synth />
-    </Start>
-  </App>
+const Home = () => (
+  <Page>
+    <Start />
+  </Page>
 );
+
+export default Home;

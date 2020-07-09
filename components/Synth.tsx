@@ -1,12 +1,22 @@
-import {
-  useEffect,
-  useContext,
-  useReducer,
-  useState,
-  createContext,
-} from "react";
-import { ToneContext } from "./Start";
+import { useEffect, useContext, useReducer, createContext } from "react";
+import dynamic from "next/dynamic";
+// import * as Tone from "tone";
 import { chromaticKeyMap, keyboardKeys } from "../config";
+
+const WithTone = dynamic(() => import("./WithTone"), {
+  ssr: false,
+});
+
+// const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
+
+// const effects = {
+//   "Bit Crusher": new Tone.BitCrusher(),
+//   Chorus: new Tone.Chorus(),
+//   Reverb: new Tone.Freeverb(),
+//   PingPongDelay: new Tone.PingPongDelay(),
+// };
+
+// export const ToneContext = createContext({ synth, effects });
 
 const initialState = {
   activeNotes: [],
@@ -83,8 +93,7 @@ const reducer = (state, action) => {
   }
 };
 
-export function useSynth() {
-  const { synth, effects } = useContext(ToneContext);
+export function useSynth({ synth, effects }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const {
@@ -209,6 +218,7 @@ export function useSynth() {
 
   return {
     state,
+    effects,
     handleKeyDown,
     handleTouchStart,
     handleMouseDown,
@@ -221,8 +231,8 @@ export function useSynth() {
 
 export const SynthContext = createContext(initialState);
 
-export const Synth = ({ children }) => {
-  const { state, ...synthFunctions } = useSynth();
+const Synth = ({ children, synth, effects }) => {
+  const { state, ...synthFunctions } = useSynth({ synth, effects });
 
   return (
     <SynthContext.Provider value={state}>
@@ -230,3 +240,11 @@ export const Synth = ({ children }) => {
     </SynthContext.Provider>
   );
 };
+
+export const SynthWithTone = ({ children }) => (
+  <WithTone>
+    {({ synth, effects }) => <Synth {...{ synth, effects, children }} />}
+  </WithTone>
+);
+
+// export default Synth;

@@ -1,19 +1,21 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Button, { BasicButton } from "./presentational/SynthButton";
 import Controls from "./presentational/Controls";
 import Label, { Labels } from "./presentational/Label";
 import Keyboard from "./presentational/Keyboard";
 import StyledSynth from "./presentational/Synth";
-import { ToneContext } from "./Start";
 import { keyboardKeys } from "../config";
 import Debug from "./Debug";
-import { Synth } from "./Synth";
+import { SynthWithTone as Synth } from "./Synth";
 import { OctaveInput } from "./OctaveInput";
 import { OscillatorSelect } from "./OscillatorSelect";
 import { EffectInput } from "./EffectInput";
 
+// const Synth = dynamic(() => import("./Synth"), {
+//   ssr: false,
+// });
+
 const App = () => {
-  const { effects } = useContext(ToneContext);
   const [displayControls, toggleDisplayControls] = useState(false);
 
   return (
@@ -26,6 +28,7 @@ const App = () => {
         handleEffectChange,
         handleOctaveChange,
         handleOscillatorChange,
+        effects,
       }) => (
         <StyledSynth
           onTouchStart={handleTouchStart}

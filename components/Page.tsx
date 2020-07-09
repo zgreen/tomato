@@ -1,6 +1,7 @@
 import Head from "next/head";
-import Footer from "./Footer";
-export default ({ children, title }) => (
+import Footer from "./presentational/Footer";
+
+export const Page = ({ children = null, title = "" }) => (
   <main>
     <style jsx global>{`
       :root {
