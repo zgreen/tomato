@@ -9,15 +9,20 @@ const { className, styles } = css.resolve`
     width: 100%;
   }
 `;
-const Synth = ({ shouldFocus, ...props }) => {
+const Synth = (props) => {
   const divRef = useRef(null);
   useEffect(() => {
     divRef.current.focus();
-  }, [shouldFocus]);
+  }, []);
   return (
     <>
       {styles}
-      <div id="playable-container" ref={divRef} {...{ ...props, className }} />
+      <div
+        tabIndex="0"
+        ref={divRef}
+        id="playable-container"
+        {...{ className, ...props }}
+      />
     </>
   );
 };

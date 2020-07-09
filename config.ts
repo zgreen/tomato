@@ -39,7 +39,7 @@ export const keyboardKeys = [
   "7",
   "8",
   "9",
-  "0"
+  "0",
 ];
 const stackedKeyboardKeys = keyboardKeys.reduce((acc, cur, idx) => {
   if (idx % 10 === 0) {
@@ -55,29 +55,29 @@ const mapRowToNotes = (
   row,
   octave,
   noteOrder = notes,
-  nextOctaveIterator = () => 0
+  nextOctaveIterator: Function = () => 0
 ) => {
   return row.reduce(
     (acc, key, idx) => ({
       ...acc,
-      [key]: noteOrder[idx].toUpperCase() + (octave + nextOctaveIterator(idx))
+      [key]: noteOrder[idx].toUpperCase() + (octave + nextOctaveIterator(idx)),
     }),
     {}
   );
 };
 
-export const chromaticKeyMap = initialOctave => {
+export const chromaticKeyMap = (initialOctave) => {
   const noteOrder = keyboardKeys.map((key, idx) => notes[idx % 12]);
-  const iterator = idx => Math.floor(idx / 12);
+  const iterator = (idx) => Math.floor(idx / 12);
   return mapRowToNotes(keyboardKeys, initialOctave, noteOrder, iterator);
 };
 
-export const stackedKeyMap = initialOctave =>
+export const stackedKeyMap = (initialOctave) =>
   stackedKeyboardKeys.reduce((acc, row, idx) => {
     if (idx < 2) {
       acc = {
         ...acc,
-        ...mapRowToNotes(row, idx === 0 ? initialOctave : initialOctave + 1)
+        ...mapRowToNotes(row, idx === 0 ? initialOctave : initialOctave + 1),
       };
     } else {
       acc = {
@@ -86,13 +86,13 @@ export const stackedKeyMap = initialOctave =>
           row,
           idx === 2 ? initialOctave : initialOctave + 1,
           notes.slice(-2).concat(notes.slice(0, 9))
-        )
+        ),
       };
     }
     return acc;
   }, {});
 
-export const literalKeyMap = initialOctave =>
+export const literalKeyMap = (initialOctave) =>
   ["c", "d", "e", "f", "g", "a", "b"].reduce(
     (acc, cur) => ({ ...acc, [cur]: cur + initialOctave }),
     {}
