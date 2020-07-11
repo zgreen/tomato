@@ -25,6 +25,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+    - run: npm run tsc
+    - run: npm run test
     - run: |
           git config --global user.name 'zgreen'
           git config --global user.email 'zgreen@users.noreply.github.com'
