@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button, { BasicButton } from "./presentational/SynthButton";
+import Button, { BasicButton } from "./SynthButton";
 import Controls from "./presentational/Controls";
 import Label, { Labels } from "./presentational/Label";
 import Keyboard from "./presentational/Keyboard";
