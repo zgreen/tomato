@@ -3,7 +3,7 @@ import Button, { BasicButton } from "./SynthButton";
 import Controls from "./presentational/Controls";
 import Label, { Labels } from "./presentational/Label";
 import Keyboard from "./presentational/Keyboard";
-import StyledSynth from "./presentational/Synth";
+import SynthKeyboard from "@/components/SynthKeyboard";
 import { keyboardKeys } from "../config";
 import Debug from "./Debug";
 import { SynthWithTone as Synth } from "./Synth";
@@ -16,7 +16,7 @@ const App = () => {
 
   return (
     <Synth>
-      <StyledSynth>
+      <SynthKeyboard>
         <Debug />
         <Controls>
           <form
@@ -50,7 +50,7 @@ const App = () => {
             ></Button>
           ))}
         </Keyboard>
-      </StyledSynth>
+      </SynthKeyboard>
     </Synth>
   );
 };

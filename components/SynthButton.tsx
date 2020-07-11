@@ -1,4 +1,4 @@
-import { memo, useRef, useContext, useEffect } from "react";
+import { memo, useContext } from "react";
 import css from "styled-jsx/css";
 import { SynthContext } from "./Synth";
 
@@ -66,16 +66,9 @@ const SynthButton = ({ totalButtons, idx, keyboardKey, ...props }) => {
   const {
     state: { activeNotes, notes },
   } = useContext(SynthContext);
-  const ref = useRef(null);
   const handleKeyDown = (e) => {
     e.preventDefault();
   };
-
-  useEffect(() => {
-    if (activeNotes[activeNotes.length - 1] === notes[keyboardKey]) {
-      ref.current.focus();
-    }
-  }, [activeNotes, notes, keyboardKey]);
 
   return (
     <>
@@ -91,7 +84,7 @@ const SynthButton = ({ totalButtons, idx, keyboardKey, ...props }) => {
           order: totalButtons - (10 * Math.ceil((idx + 1) / 10) - (idx % 10)),
         }}
         onKeyDown={handleKeyDown}
-        {...{ ...props, className, ref }}
+        {...{ ...props, className }}
       >
         <InnerButton>
           {keyboardKey}
