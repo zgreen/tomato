@@ -11,10 +11,6 @@ import { OctaveInput } from "./OctaveInput";
 import { OscillatorSelect } from "./OscillatorSelect";
 import { EffectInput } from "./EffectInput";
 
-// const Synth = dynamic(() => import("./Synth"), {
-//   ssr: false,
-// });
-
 const App = () => {
   const [displayControls, toggleDisplayControls] = useState(false);
 

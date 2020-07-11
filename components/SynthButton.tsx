@@ -14,12 +14,12 @@ const { className: basicClassName, styles: basicStyles } = css.resolve`
   }
 `;
 
-export const BasicButton = memo(({ children, type }) => (
+export const BasicButton = ({ children, type }) => (
   <>
     {basicStyles}
     <button {...{ className: basicClassName, type }}>{children}</button>
   </>
-));
+);
 
 const { className: innerClassName, styles: innerStyles } = css.resolve`
   span {
