@@ -2,6 +2,12 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
 
+declare global {
+  interface Window {
+    audio: any;
+  }
+}
+
 describe("app", () => {
   it("attacks, releases", async () => {
     const { container } = render(<App />);
