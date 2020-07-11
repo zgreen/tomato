@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { SynthContext } from "./Synth";
 
 export const EffectInput = ({ handleEffectChange, effect }) => {
-  const { activeEffects } = useContext(SynthContext);
+  const {
+    state: { activeEffects },
+  } = useContext(SynthContext);
   return (
     <input
       onChange={handleEffectChange}

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { SynthContext } from "./Synth";
 
 export default () => {
-  const state = useContext(SynthContext);
+  const { state } = useContext(SynthContext);
   if (
     process.env.NODE_ENV !== "production" &&
     process.env.NODE_ENV !== "test"

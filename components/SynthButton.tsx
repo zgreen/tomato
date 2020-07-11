@@ -63,7 +63,9 @@ const { className, styles } = css.resolve`
 `;
 
 const SynthButton = ({ totalButtons, idx, keyboardKey, ...props }) => {
-  const { activeNotes, notes } = useContext(SynthContext);
+  const {
+    state: { activeNotes, notes },
+  } = useContext(SynthContext);
   const ref = useRef(null);
   const handleKeyDown = (e) => {
     e.preventDefault();

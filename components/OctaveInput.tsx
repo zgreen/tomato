@@ -1,9 +1,12 @@
-import BoxInput from "./presentational/BoxInput";
 import { useContext } from "react";
-import { SynthContext } from "./Synth";
+import { SynthContext, useSynthHandlers } from "./Synth";
+import BoxInput from "./presentational/BoxInput";
 
-export const OctaveInput = ({ handleOctaveChange }) => {
-  const { octave } = useContext(SynthContext);
+export const OctaveInput = () => {
+  const {
+    state: { octave },
+  } = useContext(SynthContext);
+  const { handleOctaveChange } = useSynthHandlers();
   return (
     <BoxInput
       onChange={handleOctaveChange}

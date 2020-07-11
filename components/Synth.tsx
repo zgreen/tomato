@@ -1,22 +1,10 @@
 import { useEffect, useContext, useReducer, createContext } from "react";
 import dynamic from "next/dynamic";
-// import * as Tone from "tone";
 import { chromaticKeyMap, keyboardKeys } from "../config";
 
 const WithTone = dynamic(() => import("./WithTone"), {
   ssr: false,
 });
-
-// const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-
-// const effects = {
-//   "Bit Crusher": new Tone.BitCrusher(),
-//   Chorus: new Tone.Chorus(),
-//   Reverb: new Tone.Freeverb(),
-//   PingPongDelay: new Tone.PingPongDelay(),
-// };
-
-// export const ToneContext = createContext({ synth, effects });
 
 const initialState = {
   activeNotes: [],
@@ -93,19 +81,22 @@ const reducer = (state, action) => {
   }
 };
 
+const context: {
+  dispatch: Function;
+  effects: any; // @TODO
+  state: any; // @TODO
+} = {
+  effects: {},
+  state: initialState,
+  dispatch: () => {},
+};
+
+export const SynthContext = createContext(context);
+
 export function useSynth({ synth, effects }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const {
-    addEffect,
-    attack,
-    heldDisallowedKeys,
-    isTouchEnabled,
-    notes,
-    oscillator,
-    release,
-    removeEffect,
-  } = state;
+  const { addEffect, attack, oscillator, release, removeEffect } = state;
 
   useEffect(() => {
     if (!attack) {
@@ -138,6 +129,23 @@ export function useSynth({ synth, effects }) {
     }
     effects[removeEffect].disconnect();
   }, [effects, removeEffect, synth]);
+
+  return {
+    state,
+    effects,
+    dispatch,
+  };
+}
+
+export function useSynthHandlers() {
+  const { dispatch, state } = useContext(SynthContext);
+  const {
+    addEffect,
+    attack,
+    heldDisallowedKeys,
+    isTouchEnabled,
+    notes,
+  } = state;
 
   const eventedSynthKey = (e) => {
     const { key, target } = e;
@@ -217,8 +225,6 @@ export function useSynth({ synth, effects }) {
     dispatch({ type: "oscillator", payload });
 
   return {
-    state,
-    effects,
     handleKeyDown,
     handleTouchStart,
     handleMouseDown,
@@ -229,14 +235,12 @@ export function useSynth({ synth, effects }) {
   };
 }
 
-export const SynthContext = createContext(initialState);
-
 const Synth = ({ children, synth, effects }) => {
-  const { state, ...synthFunctions } = useSynth({ synth, effects });
+  const { state, dispatch } = useSynth({ synth, effects });
 
   return (
-    <SynthContext.Provider value={state}>
-      {children({ ...synthFunctions })}
+    <SynthContext.Provider value={{ state, dispatch, effects }}>
+      {children}
     </SynthContext.Provider>
   );
 };
@@ -246,5 +250,3 @@ export const SynthWithTone = ({ children }) => (
     {({ synth, effects }) => <Synth {...{ synth, effects, children }} />}
   </WithTone>
 );
-
-// export default Synth;

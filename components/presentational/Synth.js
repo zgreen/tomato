@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import css from "styled-jsx/css";
+import { useSynthHandlers } from "@/components/Synth";
+
 const { className, styles } = css.resolve`
   div {
     flex-direction: column;
@@ -11,6 +13,12 @@ const { className, styles } = css.resolve`
 `;
 const Synth = (props) => {
   const divRef = useRef(null);
+  const {
+    handleKeyDown,
+    handleTouchStart,
+    handleMouseDown,
+    handleRelease,
+  } = useSynthHandlers();
   useEffect(() => {
     divRef.current.focus();
   }, []);
@@ -21,6 +29,12 @@ const Synth = (props) => {
         tabIndex="0"
         ref={divRef}
         id="playable-container"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleRelease}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleRelease}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleRelease}
         {...{ className, ...props }}
       />
     </>

@@ -1,8 +1,11 @@
 import { useContext } from "react";
-import { SynthContext } from "./Synth";
+import { SynthContext, useSynthHandlers } from "./Synth";
 
-export const OscillatorSelect = ({ handleOscillatorChange }) => {
-  const { oscillator } = useContext(SynthContext);
+export const OscillatorSelect = () => {
+  const {
+    state: { oscillator },
+  } = useContext(SynthContext);
+  const { handleOscillatorChange } = useSynthHandlers();
   return (
     <select onChange={handleOscillatorChange} value={oscillator}>
       {["sine", "square", "triangle", "sawtooth"].map((wave) => (
