@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Button, { BasicButton } from "./SynthButton";
 import Controls from "./presentational/Controls";
 import Label, { Labels } from "./presentational/Label";
@@ -6,10 +7,11 @@ import Keyboard from "./presentational/Keyboard";
 import SynthKeyboard from "@/components/SynthKeyboard";
 import { keyboardKeys } from "../config";
 import Debug from "./Debug";
-import { SynthWithTone as Synth } from "./Synth";
 import { OctaveInput } from "./OctaveInput";
 import { OscillatorSelect } from "./OscillatorSelect";
 import { Effects } from "./Effects";
+
+const Synth = dynamic(() => import("./Synth"), { ssr: false });
 
 const App = () => {
   const [displayControls, toggleDisplayControls] = useState(false);

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import css from "styled-jsx/css";
-import { useSynthHandlers } from "@/components/Synth";
+import { useSynthHandlers } from "@/hooks/synth";
 
 const { className, styles } = css.resolve`
   div {

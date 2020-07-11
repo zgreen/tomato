@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import Label from "@/components/presentational/Label";
 import { EffectInput } from "./EffectInput";
-import { SynthContext, useSynthHandlers } from "./Synth";
+import { useSynthHandlers } from "@/hooks/synth";
+import { ToneContext } from "@/contexts/ToneContext";
 
 export const Effects = () => {
-  const { effects } = useContext(SynthContext);
+  const { effects } = useContext(ToneContext);
   const { handleEffectChange } = useSynthHandlers();
   return (
     <>

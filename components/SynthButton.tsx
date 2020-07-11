@@ -1,6 +1,6 @@
 import { memo, useContext } from "react";
 import css from "styled-jsx/css";
-import { SynthContext } from "./Synth";
+import { SynthContext } from "@/contexts/SynthContext";
 
 const { className: basicClassName, styles: basicStyles } = css.resolve`
   button {

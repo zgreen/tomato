@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SynthContext } from "./Synth";
+import { SynthContext } from "@/contexts/SynthContext";
 
 export const EffectInput = ({ handleEffectChange, effect }) => {
   const {

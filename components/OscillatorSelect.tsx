@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import { SynthContext, useSynthHandlers } from "./Synth";
+import { useSynthHandlers } from "@/hooks/synth";
+import { SynthContext } from "@/contexts/SynthContext";
 
 export const OscillatorSelect = () => {
   const {
