@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.4 (2020-07-11)
+
+
+### Bug Fixes
+
+* a few tsc errors ([9be7584](https://github.com/zgreen/tomato/commit/9be75849be3779ee19af8e429b534698902d11d0))
+
 ### 1.2.3 (2020-07-11)
 
 ### 1.2.2 (2020-07-09)
