@@ -26,7 +26,7 @@ const SynthKeyboard = memo((props) => {
     <>
       {styles}
       <div
-        tabIndex="0"
+        tabIndex={0}
         ref={divRef}
         id="playable-container"
         onTouchStart={handleTouchStart}

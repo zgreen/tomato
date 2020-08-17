@@ -59,10 +59,10 @@ export function useSynthHandlers() {
 
   const eventedSynthKey = (e) => {
     const { key, target } = e;
-    if (!key && (!target.value || target.value.indexOf("play:") !== 0)) {
+    if (!key && (!target.id || target.id.indexOf("play:") !== 0)) {
       return "";
     }
-    return key || target.value.slice(5);
+    return key || target.id.slice(5);
   };
   const handleKeyDown = (e) => {
     const { key } = e;

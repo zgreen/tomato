@@ -62,7 +62,12 @@ const { className, styles } = css.resolve`
   }
 `;
 
-const SynthButton = memo(({ totalButtons, idx, keyboardKey, ...props }) => {
+const SynthButton: React.FC<{
+  id: string;
+  totalButtons: number;
+  idx: number;
+  keyboardKey: string;
+}> = memo(({ totalButtons, idx, keyboardKey, ...props }) => {
   const notes = useSelector((state) => state.notes);
   const isActive = useSelector(
     (state) => state.activeNotes[notes[keyboardKey]]

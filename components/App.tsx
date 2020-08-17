@@ -50,7 +50,7 @@ const App = () => {
             <Button
               {...{ idx, totalButtons: arr.length, keyboardKey: key }}
               key={key}
-              value={`play:${key}`}
+              id={`play:${key}`}
             ></Button>
           ))}
         </Keyboard>
