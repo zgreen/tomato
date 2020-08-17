@@ -1,12 +1,9 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { useSynthHandlers } from "@/hooks/synth";
-import { SynthContext } from "@/contexts/SynthContext";
 import BoxInput from "./presentational/BoxInput";
 
 export const OctaveInput = () => {
-  const {
-    state: { octave },
-  } = useContext(SynthContext);
+  const octave = useSelector((state) => state.octave);
   const { handleOctaveChange } = useSynthHandlers();
   return (
     <BoxInput

@@ -1,75 +1,13 @@
-import { useEffect, useContext, useReducer } from "react";
-import { chromaticKeyMap, keyboardKeys } from "../config";
+import { useEffect, useContext, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { keyboardKeys } from "../config";
 import { ToneContext } from "@/contexts/ToneContext";
-import { initialState, SynthContext } from "@/contexts/SynthContext";
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "attack":
-      return {
-        ...state,
-        activeNotes: state.activeNotes.concat(action.payload),
-        attack: action.payload,
-        release: null,
-      };
-    case "addEffect":
-      return {
-        ...state,
-        addEffect: action.payload,
-        activeEffects: state.activeEffects.concat(action.payload),
-        removeEffect: null,
-        release: null,
-      };
-    case "updateHeldDisallowedKeys":
-      return {
-        ...state,
-        heldDisallowedKeys: action.payload,
-      };
-    case "toggleIsTouchEnabled":
-      return {
-        ...state,
-        isTouchEnabled: action.payload,
-      };
-    case "removeEffect":
-      return {
-        ...state,
-        addEffect: null,
-        activeEffects: state.activeEffects.filter(
-          (effect) => effect !== action.payload
-        ),
-        removeEffect: action.payload,
-      };
-    case "octave":
-      return {
-        ...state,
-        octave: action.payload,
-        notes: chromaticKeyMap(action.payload),
-      };
-    case "oscillator":
-      return {
-        ...state,
-        oscillator: action.payload,
-        heldDisallowedKeys: [],
-      };
-    case "release":
-      return {
-        ...state,
-        activeNotes: state.activeNotes.filter(
-          (note) => note !== action.payload
-        ),
-        release: action.payload,
-        attack: null,
-      };
-    default:
-      return state;
-  }
-};
 
 export function useSynth() {
   const { synth, effects } = useContext(ToneContext);
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const { addEffect, attack, oscillator, release, removeEffect } = state;
+  const { addEffect, attack, oscillator, release, removeEffect } = useSelector(
+    (state) => state
+  );
 
   useEffect(() => {
     if (!attack) {
@@ -102,22 +40,22 @@ export function useSynth() {
     }
     effects[removeEffect].disconnect();
   }, [effects, removeEffect, synth]);
-
-  return {
-    state,
-    dispatch,
-  };
 }
 
+export const Output = () => {
+  useSynth();
+  return null;
+};
+
 export function useSynthHandlers() {
-  const { dispatch, state } = useContext(SynthContext);
+  const dispatch = useDispatch();
   const {
     addEffect,
     attack,
     heldDisallowedKeys,
     isTouchEnabled,
     notes,
-  } = state;
+  } = useSelector((state) => state);
 
   const eventedSynthKey = (e) => {
     const { key, target } = e;

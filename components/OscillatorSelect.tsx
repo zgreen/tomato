@@ -1,11 +1,8 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { useSynthHandlers } from "@/hooks/synth";
-import { SynthContext } from "@/contexts/SynthContext";
 
 export const OscillatorSelect = () => {
-  const {
-    state: { oscillator },
-  } = useContext(SynthContext);
+  const oscillator = useSelector((state) => state.osciallator);
   const { handleOscillatorChange } = useSynthHandlers();
   return (
     <select onChange={handleOscillatorChange} value={oscillator}>

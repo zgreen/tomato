@@ -1,6 +1,6 @@
-import { memo, useContext } from "react";
+import { memo } from "react";
+import { useSelector } from "react-redux";
 import css from "styled-jsx/css";
-import { SynthContext } from "@/contexts/SynthContext";
 
 const { className: basicClassName, styles: basicStyles } = css.resolve`
   button {
@@ -62,10 +62,11 @@ const { className, styles } = css.resolve`
   }
 `;
 
-const SynthButton = ({ totalButtons, idx, keyboardKey, ...props }) => {
-  const {
-    state: { activeNotes, notes },
-  } = useContext(SynthContext);
+const SynthButton = memo(({ totalButtons, idx, keyboardKey, ...props }) => {
+  const notes = useSelector((state) => state.notes);
+  const isActive = useSelector(
+    (state) => state.activeNotes[notes[keyboardKey]]
+  );
   const handleKeyDown = (e) => {
     e.preventDefault();
   };
@@ -75,12 +76,8 @@ const SynthButton = ({ totalButtons, idx, keyboardKey, ...props }) => {
       {styles}
       <button
         style={{
-          backgroundColor: activeNotes.includes(notes[keyboardKey])
-            ? "tomato"
-            : "transparent",
-          color: activeNotes.includes(notes[keyboardKey])
-            ? "var(--brown)"
-            : "tomato",
+          backgroundColor: isActive ? "tomato" : "transparent",
+          color: isActive ? "var(--brown)" : "tomato",
           order: totalButtons - (10 * Math.ceil((idx + 1) / 10) - (idx % 10)),
         }}
         onKeyDown={handleKeyDown}
@@ -93,6 +90,6 @@ const SynthButton = ({ totalButtons, idx, keyboardKey, ...props }) => {
       </button>
     </>
   );
-};
+});
 
 export default SynthButton;

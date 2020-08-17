@@ -10,6 +10,7 @@ import Debug from "./Debug";
 import { OctaveInput } from "./OctaveInput";
 import { OscillatorSelect } from "./OscillatorSelect";
 import { Effects } from "./Effects";
+import { Output } from "@/hooks/synth";
 
 const Synth = dynamic(() => import("./Synth"), { ssr: false });
 
@@ -18,6 +19,7 @@ const App = () => {
 
   return (
     <Synth>
+      <Output />
       <SynthKeyboard>
         <Debug />
         <Controls>

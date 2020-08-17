@@ -1,10 +1,7 @@
-import { useContext } from "react";
-import { SynthContext } from "@/contexts/SynthContext";
+import { useSelector } from "react-redux";
 
 export const EffectInput = ({ handleEffectChange, effect }) => {
-  const {
-    state: { activeEffects },
-  } = useContext(SynthContext);
+  const activeEffects = useSelector((state) => state.activeEffects);
   return (
     <input
       onChange={handleEffectChange}

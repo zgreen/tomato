@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import css from "styled-jsx/css";
 import { useSynthHandlers } from "@/hooks/synth";
 
@@ -11,7 +11,7 @@ const { className, styles } = css.resolve`
     width: 100%;
   }
 `;
-const Synth = (props) => {
+const SynthKeyboard = memo((props) => {
   const divRef = useRef(null);
   const {
     handleKeyDown,
@@ -39,6 +39,6 @@ const Synth = (props) => {
       />
     </>
   );
-};
+});
 
-export default Synth;
+export default SynthKeyboard;
