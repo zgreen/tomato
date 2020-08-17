@@ -1,6 +1,8 @@
 import React from "react";
+import { Provider } from "react-redux";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import App from "./App";
+import { useStore } from "../store";
 
 declare global {
   interface Window {
@@ -8,9 +10,18 @@ declare global {
   }
 }
 
+const Component = () => {
+  const store = useStore();
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
+
 describe("app", () => {
   it("attacks, releases", async () => {
-    const { container } = render(<App />);
+    const { container } = render(<Component />);
     await waitFor(() =>
       expect(container.querySelector("#playable-container")).toBeInTheDocument()
     );
