@@ -4,24 +4,24 @@ module.exports = {
   PingPongDelay: class {},
   Freeverb: class {},
   PolySynth: class {
-    toMaster() {
+    toDestination() {
       return {
-        triggerAttack: payload => {
+        triggerAttack: (payload) => {
           window.audio = {
             ...window.audio,
-            activeNotes: [...window.audio.activeNotes, payload]
+            activeNotes: [...window.audio.activeNotes, payload],
           };
         },
-        triggerRelease: payload => {
+        triggerRelease: (payload) => {
           window.audio = {
             ...window.audio,
             activeNotes: window.audio.activeNotes.filter(
-              note => note !== payload
-            )
+              (note) => note !== payload
+            ),
           };
         },
-        set: () => {}
+        set: () => {},
       };
     }
-  }
+  },
 };
