@@ -1,21 +1,14 @@
 import { useRouter } from "next/router";
-import Tone from "tone";
+import * as Tone from "tone";
 import Start from "./presentational/Start";
 import StartButton from "./presentational/StartButton";
-import styled from "./presentational/Styled";
-const synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-
-const effects = {
-  "Bit Crusher": new Tone.BitCrusher(),
-  Chorus: new Tone.Chorus(),
-  Reverb: new Tone.Freeverb(),
-  PingPongDelay: new Tone.PingPongDelay(),
-};
+const synth = new Tone.PolySynth().toDestination();
 
 export default () => {
   const router = useRouter();
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
+    await Tone.start();
     synth.triggerAttackRelease(["C3", "E3", "G3", "B3"], "6n");
     router.push("/keyboard");
   };
@@ -26,7 +19,7 @@ export default () => {
       <em>
         This makes music when you play with it. Bail out now if that's not your
         thing. Also, it's built for english language keyboards and touch
-        devices. Your results may vary.
+        devices. It is a work in progress. Your results may vary.
       </em>
     </Start>
   );

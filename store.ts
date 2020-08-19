@@ -17,7 +17,12 @@ export const initialState = {
   notes: chromaticKeyMap(2),
   octave: 2,
   oscillator: "triangle",
+  globalStatus: "Uninitialized",
 };
+
+export enum Actions {
+  Initialize = "Initialize",
+}
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,6 +40,11 @@ const reducer = (state, action) => {
         activeEffects: state.activeEffects.concat(action.payload),
         removeEffect: null,
         release: null,
+      };
+    case Actions.Initialize:
+      return {
+        ...state,
+        globalStatus: "Initialized",
       };
     case "updateHeldDisallowedKeys":
       return {

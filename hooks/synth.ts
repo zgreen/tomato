@@ -31,7 +31,7 @@ export function useSynth() {
     if (!addEffect) {
       return;
     }
-    effects[addEffect].toMaster();
+    effects[addEffect].toDestination();
     synth.connect(effects[addEffect]);
   }, [effects, addEffect, synth]);
   useEffect(() => {

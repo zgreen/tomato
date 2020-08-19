@@ -29,7 +29,7 @@ const Output = () => {
     if (!addEffect) {
       return;
     }
-    effects[addEffect].toMaster();
+    effects[addEffect].toDestination();
     synth.connect(effects[addEffect]);
   }, [addEffect]);
   useEffect(() => {

@@ -2,7 +2,7 @@ import { createContext } from "react";
 import * as Tone from "tone";
 
 export const synth =
-  typeof window !== "undefined" && new Tone.PolySynth(6, Tone.Synth).toMaster();
+  typeof window !== "undefined" && new Tone.PolySynth().toDestination();
 export const effects = typeof window !== "undefined" && {
   "Bit Crusher": new Tone.BitCrusher(),
   Chorus: new Tone.Chorus(),
