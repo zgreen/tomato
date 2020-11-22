@@ -1,4 +1,7 @@
 .next
 .nowignore
+dist
 node_modules
 now.json
+out
+workers-site

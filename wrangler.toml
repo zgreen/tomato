@@ -1,0 +1,8 @@
+name = "tomato"
+type = "webpack"
+workers_dev = true
+
+[site]
+entry-point = "workers-site"
+bucket = "./out" # <-- Add your build directory name here!entry-point = "workers-site"
+
