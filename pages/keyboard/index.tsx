@@ -1,5 +1,5 @@
-import App from "../components/App";
-import { Page } from "../components/Page";
+import App from "../../components/App";
+import { Page } from "../../components/Page";
 
 const Keyboard = () => (
   <Page>
