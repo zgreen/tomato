@@ -1,13 +1,17 @@
-name: Deploy
+name: deploy
 
 on:
-  push:
-    branches: [master, cloudflare]
+  workflow_run:
+    workflows: ["release"]
+    branches:
+      - master
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: deploy
     steps:
       - uses: actions/checkout@v2
 

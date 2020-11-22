@@ -1,0 +1,21 @@
+name: release
+
+on:
+  workflow_run:
+    workflows: ["test"]
+    branches:
+      - master
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          git config --global user.name 'zgreen'
+          git config --global user.email 'zgreen@users.noreply.github.com'
+          npx standard-version
+          git push --follow-tags origin master
