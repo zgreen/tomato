@@ -1,5 +1,6 @@
 module.exports = {
   target: "serverless",
+  trailingSlash: true,
   webpack(config) {
     return {
       ...config,

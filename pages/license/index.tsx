@@ -1,4 +1,4 @@
-import { Page } from "../components/Page";
+import { Page } from "../../components/Page";
 export default () => {
   const date = new Date();
   const year = date.getFullYear();
